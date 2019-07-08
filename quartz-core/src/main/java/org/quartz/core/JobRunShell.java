@@ -1,29 +1,6 @@
-
-/*
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- *
- */
-
 package org.quartz.core;
 
-import org.quartz.Job;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
+import org.quartz.*;
 import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.impl.JobExecutionContextImpl;
 import org.quartz.listeners.SchedulerListenerSupport;
@@ -48,26 +25,18 @@ import org.slf4j.LoggerFactory;
  * scheduler determines that a <code>Job</code> has been triggered.
  * </p>
  *
+ * @author James House
  * @see JobRunShellFactory
  * @see org.quartz.core.QuartzSchedulerThread
  * @see org.quartz.Job
  * @see org.quartz.Trigger
- *
- * @author James House
  */
 public class JobRunShell extends SchedulerListenerSupport implements Runnable {
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Data members.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     protected JobExecutionContextImpl jec = null;
 
     protected QuartzScheduler qs = null;
-    
+
     protected TriggerFiredBundle firedTriggerBundle = null;
 
     protected Scheduler scheduler = null;
@@ -76,35 +45,20 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Constructors.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
      * Create a JobRunShell instance with the given settings.
      * </p>
      *
-     * @param scheduler
-     *          The <code>Scheduler</code> instance that should be made
-     *          available within the <code>JobExecutionContext</code>.
+     * @param scheduler The <code>Scheduler</code> instance that should be made
+     *                  available within the <code>JobExecutionContext</code>.
      */
     public JobRunShell(Scheduler scheduler, TriggerFiredBundle bndle) {
         this.scheduler = scheduler;
         this.firedTriggerBundle = bndle;
     }
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Interface.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     @Override
     public void schedulerShuttingdown() {
@@ -117,7 +71,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
     }
 
     public void initialize(QuartzScheduler sched)
-        throws SchedulerException {
+            throws SchedulerException {
         this.qs = sched;
 
         Job job = null;
@@ -173,11 +127,11 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
                     if (!notifyListenersBeginning(jec)) {
                         break;
                     }
-                } catch(VetoedException ve) {
+                } catch (VetoedException ve) {
                     try {
                         CompletedExecutionInstruction instCode = trigger.executionComplete(jec, null);
                         qs.notifyJobStoreJobVetoed(trigger, jobDetail, instCode);
-                        
+
                         // QTZ-205
                         // Even if trigger got vetoed, we still needs to check to see if it's the trigger's finalized run or not.
                         if (jec.getTrigger().getNextFireTime() == null) {
@@ -279,7 +233,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
     }
 
     protected void complete(boolean successfulExecution)
-        throws SchedulerException {
+            throws SchedulerException {
     }
 
     public void passivate() {
@@ -304,16 +258,16 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
             return false;
         }
 
-        if(vetoed) {
+        if (vetoed) {
             try {
                 qs.notifyJobListenersWasVetoed(jobExCtxt);
             } catch (SchedulerException se) {
                 qs.notifySchedulerListenersError(
                         "Unable to notify JobListener(s) of vetoed execution " +
-                        "while firing trigger (Trigger and Job will NOT be " +
-                        "fired!). trigger= "
-                        + jobExCtxt.getTrigger().getKey() + " job= "
-                        + jobExCtxt.getJobDetail().getKey(), se);
+                                "while firing trigger (Trigger and Job will NOT be " +
+                                "fired!). trigger= "
+                                + jobExCtxt.getTrigger().getKey() + " job= "
+                                + jobExCtxt.getJobDetail().getKey(), se);
 
             }
             throw new VetoedException();

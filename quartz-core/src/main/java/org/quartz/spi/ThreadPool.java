@@ -1,20 +1,3 @@
-/*
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- *
- */
-
 package org.quartz.spi;
 
 import org.quartz.SchedulerConfigException;
@@ -37,22 +20,13 @@ import org.quartz.SchedulerConfigException;
  * </p>
  *
  * <p>
- *     线程池接口，仅限于QuartzScheduler使用
+ * 线程池接口，仅限于QuartzScheduler使用
  * </p>
  *
- * @see org.quartz.core.QuartzScheduler
- *
  * @author James House
+ * @see org.quartz.core.QuartzScheduler
  */
 public interface ThreadPool {
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Interface.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
@@ -67,8 +41,8 @@ public interface ThreadPool {
      * </p>
      *
      * <p>
-     *     在空闲线程上执行，如果当前没有可用的空闲线程，返回false。
-     *     该实现不应该抛出异常，除非遇到严重问题（如严重的配置错误）
+     * 在空闲线程上执行，如果当前没有可用的空闲线程，返回false。
+     * 该实现不应该抛出异常，除非遇到严重问题（如严重的配置错误）
      * </p>
      *
      * @return true, if the runnable was assigned to run on a Thread.
@@ -85,9 +59,9 @@ public interface ThreadPool {
      *
      * <p>The implementation of this method should block until there is at
      * least one available thread.</p>
-     *
+     * <p>
      * 返回线程池中当前可用线程的数量，也是`runInThread(Runnable)`可以被调用的次数
-     *
+     * <p>
      * 如果线程池中没有可用线程，该方法会block
      *
      * @return the number of currently available threads
@@ -99,7 +73,7 @@ public interface ThreadPool {
      * Must be called before the <code>ThreadPool</code> is
      * used, in order to give the it a chance to initialize.
      * </p>
-     * 
+     *
      * <p>Typically called by the <code>SchedulerFactory</code>.</p>
      */
     void initialize() throws SchedulerConfigException;
@@ -114,23 +88,19 @@ public interface ThreadPool {
     void shutdown(boolean waitForJobsToComplete);
 
     /**
-     * <p>Get the current number of threads in the <code>ThreadPool</code>.</p>
+     * Get the current number of threads in the <code>ThreadPool</code>.
      */
     int getPoolSize();
 
     /**
-     * <p>Inform the <code>ThreadPool</code> of the Scheduler instance's Id,
-     * prior to initialize being invoked.</p>
-     *
-     * @since 1.7
+     * Inform the <code>ThreadPool</code> of the Scheduler instance's Id,
+     * prior to initialize being invoked.
      */
     void setInstanceId(String schedInstId);
 
     /**
-     * <p>Inform the <code>ThreadPool</code> of the Scheduler instance's name,
-     * prior to initialize being invoked.</p>
-     *
-     * @since 1.7
+     * Inform the <code>ThreadPool</code> of the Scheduler instance's name,
+     * prior to initialize being invoked.
      */
     void setInstanceName(String schedName);
 

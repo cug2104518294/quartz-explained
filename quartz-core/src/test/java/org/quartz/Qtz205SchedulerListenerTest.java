@@ -99,7 +99,8 @@ public class Qtz205SchedulerListenerTest {
 		public void triggerPaused(TriggerKey triggerKey) {
 		}
 
-		public void triggersPaused(String triggerGroup) {	
+		@Override
+        public void triggersPaused(String triggerGroup) {
 		}
 
 		public void triggerResumed(TriggerKey triggerKey) {
@@ -117,6 +118,7 @@ public class Qtz205SchedulerListenerTest {
 		public void jobPaused(JobKey jobKey) {
 		}
 
+		@Override
 		public void jobsPaused(String jobGroup) {
 		}
 
@@ -130,21 +132,27 @@ public class Qtz205SchedulerListenerTest {
 		public void schedulerError(String msg, SchedulerException cause) {			
 		}
 
+		@Override
 		public void schedulerInStandbyMode() {
 		}
 
+		@Override
 		public void schedulerStarted() {
 		}
 		
+		@Override
 		public void schedulerStarting() {
 		}
 
+		@Override
 		public void schedulerShutdown() {
 		}
 
+		@Override
 		public void schedulerShuttingdown() {
 		}
 
+		@Override
 		public void schedulingDataCleared() {
 		}
 	}

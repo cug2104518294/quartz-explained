@@ -753,6 +753,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         sendNotification(JOB_UNSCHEDULED, map);
     }
     
+    @Override
     public void schedulingDataCleared() {
         sendNotification(SCHEDULING_DATA_CLEARED);
     }
@@ -764,6 +765,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         sendNotification(JOBS_PAUSED, map);
     }
 
+    @Override
     public void jobsPaused(String jobGroup) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("jobName", null);
@@ -789,18 +791,22 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         sendNotification(SCHEDULER_ERROR, cause.getMessage());
     }
 
+    @Override
     public void schedulerStarted() {
         sendNotification(SCHEDULER_STARTED);
     }
     
     //not doing anything, just like schedulerShuttingdown
+    @Override
     public void schedulerStarting() {
     }
 
+    @Override
     public void schedulerInStandbyMode() {
         sendNotification(SCHEDULER_PAUSED);
     }
 
+    @Override
     public void schedulerShutdown() {
         scheduler.removeInternalSchedulerListener(this);
         scheduler.removeInternalJobListener(getName());
@@ -808,6 +814,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         sendNotification(SCHEDULER_SHUTDOWN);
     }
 
+    @Override
     public void schedulerShuttingdown() {
     }
 
@@ -818,6 +825,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         sendNotification(TRIGGER_FINALIZED, map);
     }
 
+    @Override
     public void triggersPaused(String triggerGroup) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("triggerName", null);

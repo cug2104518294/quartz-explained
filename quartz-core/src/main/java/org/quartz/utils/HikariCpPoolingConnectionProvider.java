@@ -176,6 +176,7 @@ public class HikariCpPoolingConnectionProvider implements PoolingConnectionProvi
         return datasource;
     }
 
+    @Override
     public Connection getConnection() throws SQLException {
         return datasource.getConnection();
     }

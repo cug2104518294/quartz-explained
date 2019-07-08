@@ -130,6 +130,7 @@ public final class JdbcQuartzTestUtilities {
             }
         }
 
+        @Override
         public Connection getConnection() throws SQLException {
             return DriverManager.getConnection(DATABASE_CONNECTION_PREFIX + databaseName);
         }

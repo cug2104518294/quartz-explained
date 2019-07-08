@@ -803,6 +803,7 @@ public abstract class RemoteMBeanScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean checkExists(TriggerKey triggerKey) throws SchedulerException {
         return (Boolean)invoke(
                 "checkExists", 
@@ -810,6 +811,7 @@ public abstract class RemoteMBeanScheduler implements Scheduler {
                 new String[] { TriggerKey.class.getName() });
     }
     
+    @Override
     public void clear() throws SchedulerException {
         invoke(
                 "clear", 

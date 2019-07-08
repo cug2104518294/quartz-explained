@@ -1,20 +1,3 @@
-/*
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz;
 
 import java.util.Calendar;
@@ -23,40 +6,40 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * <code>DateBuilder</code> is used to conveniently create 
+ * <code>DateBuilder</code> is used to conveniently create
  * <code>java.util.Date</code> instances that meet particular criteria.
- *  
+ *
  * <p>Quartz provides a builder-style API for constructing scheduling-related
  * entities via a Domain-Specific Language (DSL).  The DSL can best be
  * utilized through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>, 
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> 
+ * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code>
  * and the various <code>ScheduleBuilder</code> implementations.</p>
- * 
+ *
  * <p>Client code can then use the DSL to write code such as this:</p>
  * <pre>
  *         JobDetail job = newJob(MyJob.class)
  *             .withIdentity("myJob")
  *             .build();
- *             
- *         Trigger trigger = newTrigger() 
+ *
+ *         Trigger trigger = newTrigger()
  *             .withIdentity(triggerKey("myTrigger", "myTriggerGroup"))
  *             .withSchedule(simpleSchedule()
  *                 .withIntervalInHours(1)
  *                 .repeatForever())
  *             .startAt(futureDate(10, MINUTES))
  *             .build();
- *         
+ *
  *         scheduler.scheduleJob(job, trigger);
  * <pre>
- *  
+ *
  * @see TriggerBuilder
- * @see JobBuilder 
+ * @see JobBuilder
  */
 public class DateBuilder {
 
-    public enum IntervalUnit { MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR }
-    
+    public enum IntervalUnit {MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR}
+
     public static final int SUNDAY = 1;
 
     public static final int MONDAY = 2;
@@ -70,9 +53,9 @@ public class DateBuilder {
     public static final int FRIDAY = 6;
 
     public static final int SATURDAY = 7;
-    
+
     public static final int JANUARY = 1;
-    
+
     public static final int FEBRUARY = 2;
 
     public static final int MARCH = 3;
@@ -102,7 +85,7 @@ public class DateBuilder {
     public static final long SECONDS_IN_MOST_DAYS = 24l * 60l * 60L;
 
     public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * 1000l;
-    
+
     private int month;
     private int day;
     private int year;
@@ -111,13 +94,12 @@ public class DateBuilder {
     private int second;
     private TimeZone tz;
     private Locale lc;
-    
+
     /**
      * Create a DateBuilder, with initial settings for the current date and time in the system default timezone.
      */
     private DateBuilder() {
         Calendar cal = Calendar.getInstance();
-        
         month = cal.get(Calendar.MONTH) + 1;
         day = cal.get(Calendar.DAY_OF_MONTH);
         year = cal.get(Calendar.YEAR);
@@ -131,7 +113,6 @@ public class DateBuilder {
      */
     private DateBuilder(TimeZone tz) {
         Calendar cal = Calendar.getInstance(tz);
-        
         this.tz = tz;
         month = cal.get(Calendar.MONTH) + 1;
         day = cal.get(Calendar.DAY_OF_MONTH);
@@ -146,7 +127,7 @@ public class DateBuilder {
      */
     private DateBuilder(Locale lc) {
         Calendar cal = Calendar.getInstance(lc);
-        
+
         this.lc = lc;
         month = cal.get(Calendar.MONTH) + 1;
         day = cal.get(Calendar.DAY_OF_MONTH);
@@ -161,7 +142,7 @@ public class DateBuilder {
      */
     private DateBuilder(TimeZone tz, Locale lc) {
         Calendar cal = Calendar.getInstance(tz, lc);
-        
+
         this.tz = tz;
         this.lc = lc;
         month = cal.get(Calendar.MONTH) + 1;
@@ -201,20 +182,20 @@ public class DateBuilder {
     }
 
     /**
-     * Build the Date defined by this builder instance. 
+     * Build the Date defined by this builder instance.
      */
     public Date build() {
         Calendar cal;
 
-        if(tz != null && lc != null)
+        if (tz != null && lc != null)
             cal = Calendar.getInstance(tz, lc);
-        else if(tz != null)
+        else if (tz != null)
             cal = Calendar.getInstance(tz);
-        else if(lc != null)
+        else if (lc != null)
             cal = Calendar.getInstance(lc);
-        else 
-          cal = Calendar.getInstance();
-        
+        else
+            cal = Calendar.getInstance();
+
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);
         cal.set(Calendar.DAY_OF_MONTH, day);
@@ -222,16 +203,16 @@ public class DateBuilder {
         cal.set(Calendar.MINUTE, minute);
         cal.set(Calendar.SECOND, second);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         return cal.getTime();
     }
-    
+
     /**
      * Set the hour (0-23) for the Date that will be built by this builder.
      */
     public DateBuilder atHourOfDay(int atHour) {
         validateHour(atHour);
-        
+
         this.hour = atHour;
         return this;
     }
@@ -241,7 +222,7 @@ public class DateBuilder {
      */
     public DateBuilder atMinute(int atMinute) {
         validateMinute(atMinute);
-        
+
         this.minute = atMinute;
         return this;
     }
@@ -251,7 +232,7 @@ public class DateBuilder {
      */
     public DateBuilder atSecond(int atSecond) {
         validateSecond(atSecond);
-        
+
         this.second = atSecond;
         return this;
     }
@@ -260,19 +241,19 @@ public class DateBuilder {
         validateHour(atHour);
         validateMinute(atMinute);
         validateSecond(atSecond);
-        
+
         this.hour = atHour;
         this.second = atSecond;
         this.minute = atMinute;
         return this;
     }
-    
+
     /**
      * Set the day of month (1-31) for the Date that will be built by this builder.
      */
     public DateBuilder onDay(int onDay) {
         validateDayOfMonth(onDay);
-        
+
         this.day = onDay;
         return this;
     }
@@ -282,15 +263,15 @@ public class DateBuilder {
      */
     public DateBuilder inMonth(int inMonth) {
         validateMonth(inMonth);
-        
+
         this.month = inMonth;
         return this;
     }
-    
+
     public DateBuilder inMonthOnDay(int inMonth, int onDay) {
         validateMonth(inMonth);
         validateDayOfMonth(onDay);
-        
+
         this.month = inMonth;
         this.day = onDay;
         return this;
@@ -301,7 +282,7 @@ public class DateBuilder {
      */
     public DateBuilder inYear(int inYear) {
         validateYear(inYear);
-        
+
         this.year = inYear;
         return this;
     }
@@ -323,28 +304,37 @@ public class DateBuilder {
     }
 
     public static Date futureDate(int interval, IntervalUnit unit) {
-        
+
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.setLenient(true);
-        
+
         c.add(translate(unit), interval);
 
         return c.getTime();
     }
-    
+
 
     private static int translate(IntervalUnit unit) {
-        switch(unit) {
-            case DAY : return Calendar.DAY_OF_YEAR;
-            case HOUR : return Calendar.HOUR_OF_DAY;
-            case MINUTE : return Calendar.MINUTE;
-            case MONTH : return Calendar.MONTH;
-            case SECOND : return Calendar.SECOND;
-            case MILLISECOND : return Calendar.MILLISECOND;
-            case WEEK : return Calendar.WEEK_OF_YEAR;
-            case YEAR : return Calendar.YEAR;
-            default : throw new IllegalArgumentException("Unknown IntervalUnit");
+        switch (unit) {
+            case DAY:
+                return Calendar.DAY_OF_YEAR;
+            case HOUR:
+                return Calendar.HOUR_OF_DAY;
+            case MINUTE:
+                return Calendar.MINUTE;
+            case MONTH:
+                return Calendar.MONTH;
+            case SECOND:
+                return Calendar.SECOND;
+            case MILLISECOND:
+                return Calendar.MILLISECOND;
+            case WEEK:
+                return Calendar.WEEK_OF_YEAR;
+            case YEAR:
+                return Calendar.YEAR;
+            default:
+                throw new IllegalArgumentException("Unknown IntervalUnit");
         }
     }
 
@@ -353,13 +343,10 @@ public class DateBuilder {
      * Get a <code>Date</code> object that represents the given time, on
      * tomorrow's date.
      * </p>
-     * 
-     * @param second
-     *          The value (0-59) to give the seconds field of the date
-     * @param minute
-     *          The value (0-59) to give the minutes field of the date
-     * @param hour
-     *          The value (0-23) to give the hours field of the date
+     *
+     * @param second The value (0-59) to give the seconds field of the date
+     * @param minute The value (0-59) to give the minutes field of the date
+     * @param hour   The value (0-23) to give the hours field of the date
      * @return the new date
      */
     public static Date tomorrowAt(int hour, int minute, int second) {
@@ -375,7 +362,7 @@ public class DateBuilder {
 
         // advance one day
         c.add(Calendar.DAY_OF_YEAR, 1);
-        
+
         c.set(Calendar.HOUR_OF_DAY, hour);
         c.set(Calendar.MINUTE, minute);
         c.set(Calendar.SECOND, second);
@@ -389,31 +376,25 @@ public class DateBuilder {
      * Get a <code>Date</code> object that represents the given time, on
      * today's date (equivalent to {@link #dateOf(int, int, int)}).
      * </p>
-     * 
-     * @param second
-     *          The value (0-59) to give the seconds field of the date
-     * @param minute
-     *          The value (0-59) to give the minutes field of the date
-     * @param hour
-     *          The value (0-23) to give the hours field of the date
+     *
+     * @param second The value (0-59) to give the seconds field of the date
+     * @param minute The value (0-59) to give the minutes field of the date
+     * @param hour   The value (0-23) to give the hours field of the date
      * @return the new date
      */
     public static Date todayAt(int hour, int minute, int second) {
         return dateOf(hour, minute, second);
     }
-    
+
     /**
      * <p>
      * Get a <code>Date</code> object that represents the given time, on
      * today's date  (equivalent to {@link #todayAt(int, int, int)}).
      * </p>
-     * 
-     * @param second
-     *          The value (0-59) to give the seconds field of the date
-     * @param minute
-     *          The value (0-59) to give the minutes field of the date
-     * @param hour
-     *          The value (0-23) to give the hours field of the date
+     *
+     * @param second The value (0-59) to give the seconds field of the date
+     * @param minute The value (0-59) to give the minutes field of the date
+     * @param hour   The value (0-23) to give the hours field of the date
      * @return the new date
      */
     public static Date dateOf(int hour, int minute, int second) {
@@ -440,21 +421,16 @@ public class DateBuilder {
      * Get a <code>Date</code> object that represents the given time, on the
      * given date.
      * </p>
-     * 
-     * @param second
-     *          The value (0-59) to give the seconds field of the date
-     * @param minute
-     *          The value (0-59) to give the minutes field of the date
-     * @param hour
-     *          The value (0-23) to give the hours field of the date
-     * @param dayOfMonth
-     *          The value (1-31) to give the day of month field of the date
-     * @param month
-     *          The value (1-12) to give the month field of the date
+     *
+     * @param second     The value (0-59) to give the seconds field of the date
+     * @param minute     The value (0-59) to give the minutes field of the date
+     * @param hour       The value (0-23) to give the hours field of the date
+     * @param dayOfMonth The value (1-31) to give the day of month field of the date
+     * @param month      The value (1-12) to give the month field of the date
      * @return the new date
      */
     public static Date dateOf(int hour, int minute, int second,
-            int dayOfMonth, int month) {
+                              int dayOfMonth, int month) {
         validateSecond(second);
         validateMinute(minute);
         validateHour(hour);
@@ -481,23 +457,17 @@ public class DateBuilder {
      * Get a <code>Date</code> object that represents the given time, on the
      * given date.
      * </p>
-     * 
-     * @param second
-     *          The value (0-59) to give the seconds field of the date
-     * @param minute
-     *          The value (0-59) to give the minutes field of the date
-     * @param hour
-     *          The value (0-23) to give the hours field of the date
-     * @param dayOfMonth
-     *          The value (1-31) to give the day of month field of the date
-     * @param month
-     *          The value (1-12) to give the month field of the date
-     * @param year
-     *          The value (1970-2099) to give the year field of the date
+     *
+     * @param second     The value (0-59) to give the seconds field of the date
+     * @param minute     The value (0-59) to give the minutes field of the date
+     * @param hour       The value (0-23) to give the hours field of the date
+     * @param dayOfMonth The value (1-31) to give the day of month field of the date
+     * @param month      The value (1-12) to give the month field of the date
+     * @param year       The value (1970-2099) to give the year field of the date
      * @return the new date
      */
     public static Date dateOf(int hour, int minute, int second,
-            int dayOfMonth, int month, int year) {
+                              int dayOfMonth, int month, int year) {
         validateSecond(second);
         validateMinute(minute);
         validateHour(hour);
@@ -526,33 +496,33 @@ public class DateBuilder {
      * <p>
      * Returns a date that is rounded to the next even hour after the current time.
      * </p>
-     * 
+     *
      * <p>
      * For example a current time of 08:13:54 would result in a date
      * with the time of 09:00:00. If the date's time is in the 23rd hour, the
      * date's 'day' will be promoted, and the time will be set to 00:00:00.
      * </p>
-     * 
+     *
      * @return the new rounded date
      */
     public static Date evenHourDateAfterNow() {
         return evenHourDate(null);
     }
+
     /**
      * <p>
      * Returns a date that is rounded to the next even hour above the given
      * date.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54 would result in a date
      * with the time of 09:00:00. If the date's time is in the 23rd hour, the
      * date's 'day' will be promoted, and the time will be set to 00:00:00.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenHourDate(Date date) {
@@ -577,15 +547,14 @@ public class DateBuilder {
      * Returns a date that is rounded to the previous even hour below the given
      * date.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54 would result in a date
      * with the time of 08:00:00.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenHourDateBefore(Date date) {
@@ -607,34 +576,33 @@ public class DateBuilder {
      * <p>
      * Returns a date that is rounded to the next even minute after the current time.
      * </p>
-     * 
+     *
      * <p>
      * For example a current time of 08:13:54 would result in a date
      * with the time of 08:14:00. If the date's time is in the 59th minute,
      * then the hour (and possibly the day) will be promoted.
      * </p>
-     * 
+     *
      * @return the new rounded date
      */
     public static Date evenMinuteDateAfterNow() {
         return evenMinuteDate(null);
     }
-    
+
     /**
      * <p>
      * Returns a date that is rounded to the next even minute above the given
      * date.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54 would result in a date
      * with the time of 08:14:00. If the date's time is in the 59th minute,
      * then the hour (and possibly the day) will be promoted.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenMinuteDate(Date date) {
@@ -655,18 +623,17 @@ public class DateBuilder {
 
     /**
      * <p>
-     * Returns a date that is rounded to the previous even minute below the 
+     * Returns a date that is rounded to the previous even minute below the
      * given date.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54 would result in a date
      * with the time of 08:13:00.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenMinuteDateBefore(Date date) {
@@ -687,21 +654,21 @@ public class DateBuilder {
      * <p>
      * Returns a date that is rounded to the next even second after the current time.
      * </p>
-     * 
+     *
      * @return the new rounded date
      */
     public static Date evenSecondDateAfterNow() {
         return evenSecondDate(null);
     }
+
     /**
      * <p>
      * Returns a date that is rounded to the next even second above the given
      * date.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenSecondDate(Date date) {
@@ -724,15 +691,14 @@ public class DateBuilder {
      * Returns a date that is rounded to the previous even second below the
      * given date.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54.341 would result in a
      * date with the time of 08:13:54.000.
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
+     *
+     * @param date the Date to round, if <code>null</code> the current time will
+     *             be used
      * @return the new rounded date
      */
     public static Date evenSecondDateBefore(Date date) {
@@ -747,13 +713,13 @@ public class DateBuilder {
 
         return c.getTime();
     }
-    
+
     /**
      * <p>
      * Returns a date that is rounded to the next even multiple of the given
      * minute.
      * </p>
-     * 
+     *
      * <p>
      * For example an input date with a time of 08:13:54, and an input
      * minute-base of 5 would result in a date with the time of 08:15:00. The
@@ -762,7 +728,7 @@ public class DateBuilder {
      * input minute-base of 45 would result in 09:00:00, because the even-hour
      * is the next 'base' for 45-minute intervals.
      * </p>
-     * 
+     *
      * <p>
      * More examples: <table>
      * <tr>
@@ -831,14 +797,11 @@ public class DateBuilder {
      * </tr>
      * </table>
      * </p>
-     * 
-     * @param date
-     *          the Date to round, if <code>null</code> the current time will
-     *          be used
-     * @param minuteBase
-     *          the base-minute to set the time on
+     *
+     * @param date       the Date to round, if <code>null</code> the current time will
+     *                   be used
+     * @param minuteBase the base-minute to set the time on
      * @return the new rounded date
-     * 
      * @see #nextGivenSecondDate(Date, int)
      */
     public static Date nextGivenMinuteDate(Date date, int minuteBase) {
@@ -885,24 +848,23 @@ public class DateBuilder {
             return c.getTime();
         }
     }
-    
+
     /**
      * <p>
      * Returns a date that is rounded to the next even multiple of the given
      * minute.
      * </p>
-     * 
+     *
      * <p>
      * The rules for calculating the second are the same as those for
-     * calculating the minute in the method 
+     * calculating the minute in the method
      * <code>getNextGivenMinuteDate(..)<code>.
      * </p>
      *
-     * @param date the Date to round, if <code>null</code> the current time will
-     * be used
+     * @param date       the Date to round, if <code>null</code> the current time will
+     *                   be used
      * @param secondBase the base-second to set the time on
      * @return the new rounded date
-     * 
      * @see #nextGivenMinuteDate(Date, int)
      */
     public static Date nextGivenSecondDate(Date date, int secondBase) {
@@ -949,11 +911,11 @@ public class DateBuilder {
 
     /**
      * Translate a date & time from a users time zone to the another
-     * (probably server) time zone to assist in creating a simple trigger with 
+     * (probably server) time zone to assist in creating a simple trigger with
      * the right date & time.
-     * 
+     *
      * @param date the date to translate
-     * @param src the original time-zone
+     * @param src  the original time-zone
      * @param dest the destination time-zone
      * @return the translated date
      */
@@ -969,7 +931,7 @@ public class DateBuilder {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     public static void validateDayOfWeek(int dayOfWeek) {
         if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY) {
             throw new IllegalArgumentException("Invalid day of week.");
@@ -1011,6 +973,7 @@ public class DateBuilder {
     }
 
     private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR) + 100;
+
     public static void validateYear(int year) {
         if (year < 0 || year > MAX_YEAR) {
             throw new IllegalArgumentException(

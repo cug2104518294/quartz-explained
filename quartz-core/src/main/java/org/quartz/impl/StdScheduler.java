@@ -1,44 +1,15 @@
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz.impl;
+
+import org.quartz.*;
+import org.quartz.Trigger.TriggerState;
+import org.quartz.core.QuartzScheduler;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.spi.JobFactory;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.quartz.Calendar;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
-import org.quartz.ListenerManager;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerContext;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerMetaData;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
-import org.quartz.UnableToInterruptJobException;
-import org.quartz.Trigger.TriggerState;
-import org.quartz.core.QuartzScheduler;
-import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.spi.JobFactory;
 
 /**
  * <p>
@@ -50,19 +21,18 @@ import org.quartz.spi.JobFactory;
  * <p>
  * Scheduler的一种实现，使用代理模式，将所有的调用代理给QuartzScheduler。
  * </p>
- * 
- * @see org.quartz.Scheduler
- * @see org.quartz.core.QuartzScheduler
  *
  * @author James House
+ * @see org.quartz.Scheduler
+ * @see org.quartz.core.QuartzScheduler
  */
 public class StdScheduler implements Scheduler {
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
+     *
      * Data members.
-     * 
+     *
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
@@ -70,9 +40,9 @@ public class StdScheduler implements Scheduler {
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
+     *
      * Constructors.
-     * 
+     *
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
@@ -88,9 +58,9 @@ public class StdScheduler implements Scheduler {
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
+     *
      * Interface.
-     * 
+     *
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
@@ -99,6 +69,7 @@ public class StdScheduler implements Scheduler {
      * Returns the name of the <code>Scheduler</code>.
      * </p>
      */
+    @Override
     public String getSchedulerName() {
         return sched.getSchedulerName();
     }
@@ -108,16 +79,18 @@ public class StdScheduler implements Scheduler {
      * Returns the instance Id of the <code>Scheduler</code>.
      * </p>
      */
+    @Override
     public String getSchedulerInstanceId() {
         return sched.getSchedulerInstanceId();
     }
 
+    @Override
     public SchedulerMetaData getMetaData() {
         return new SchedulerMetaData(getSchedulerName(),
-                getSchedulerInstanceId(), getClass(), false, isStarted(), 
-                isInStandbyMode(), isShutdown(), sched.runningSince(), 
-                sched.numJobsExecuted(), sched.getJobStoreClass(), 
-                sched.supportsPersistence(), sched.isClustered(), sched.getThreadPoolClass(), 
+                getSchedulerInstanceId(), getClass(), false, isStarted(),
+                isInStandbyMode(), isShutdown(), sched.runningSince(),
+                sched.numJobsExecuted(), sched.getJobStoreClass(),
+                sched.supportsPersistence(), sched.isClustered(), sched.getThreadPoolClass(),
                 sched.getThreadPoolSize(), sched.getVersion());
 
     }
@@ -127,6 +100,7 @@ public class StdScheduler implements Scheduler {
      * Returns the <code>SchedulerContext</code> of the <code>Scheduler</code>.
      * </p>
      */
+    @Override
     public SchedulerContext getContext() throws SchedulerException {
         return sched.getSchedulerContext();
     }
@@ -142,6 +116,7 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void start() throws SchedulerException {
         sched.start();
     }
@@ -151,6 +126,7 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void startDelayed(int seconds) throws SchedulerException {
         sched.startDelayed(seconds);
     }
@@ -161,33 +137,36 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void standby() {
         sched.standby();
     }
-    
+
     /**
-     * Whether the scheduler has been started.  
-     * 
+     * Whether the scheduler has been started.
+     *
      * <p>
      * Note: This only reflects whether <code>{@link #start()}</code> has ever
-     * been called on this Scheduler, so it will return <code>true</code> even 
-     * if the <code>Scheduler</code> is currently in standby mode or has been 
+     * been called on this Scheduler, so it will return <code>true</code> even
+     * if the <code>Scheduler</code> is currently in standby mode or has been
      * since shutdown.
      * </p>
-     * 
+     *
      * @see #start()
      * @see #isShutdown()
      * @see #isInStandbyMode()
-     */    
+     */
+    @Override
     public boolean isStarted() {
         return (sched.runningSince() != null);
     }
-    
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean isInStandbyMode() {
         return sched.isInStandbyMode();
     }
@@ -197,6 +176,7 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void shutdown() {
         sched.shutdown();
     }
@@ -206,6 +186,7 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void shutdown(boolean waitForJobsToComplete) {
         sched.shutdown(waitForJobsToComplete);
     }
@@ -215,6 +196,7 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean isShutdown() {
         return sched.isShutdown();
     }
@@ -239,17 +221,18 @@ public class StdScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void clear() throws SchedulerException {
         sched.clear();
     }
-    
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
     public Date scheduleJob(JobDetail jobDetail, Trigger trigger)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.scheduleJob(jobDetail, trigger);
     }
 
@@ -268,7 +251,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void addJob(JobDetail jobDetail, boolean replace)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.addJob(jobDetail, replace);
     }
 
@@ -287,21 +270,21 @@ public class StdScheduler implements Scheduler {
     }
 
     public void scheduleJob(JobDetail jobDetail, Set<? extends Trigger> triggersForJob, boolean replace) throws SchedulerException {
-        sched.scheduleJob(jobDetail,  triggersForJob, replace);
+        sched.scheduleJob(jobDetail, triggersForJob, replace);
     }
-    
+
     public boolean unscheduleJobs(List<TriggerKey> triggerKeys)
             throws SchedulerException {
         return sched.unscheduleJobs(triggerKeys);
-    }    
-    
+    }
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
     public boolean deleteJob(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.deleteJob(jobKey);
     }
 
@@ -311,17 +294,17 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public boolean unscheduleJob(TriggerKey triggerKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.unscheduleJob(triggerKey);
     }
-    
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
     public Date rescheduleJob(TriggerKey triggerKey,
-            Trigger newTrigger) throws SchedulerException {
+                              Trigger newTrigger) throws SchedulerException {
         return sched.rescheduleJob(triggerKey, newTrigger);
     }
 
@@ -331,17 +314,17 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void triggerJob(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         triggerJob(jobKey, null);
     }
-    
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
     public void triggerJob(JobKey jobKey, JobDataMap data)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.triggerJob(jobKey, data);
     }
 
@@ -351,7 +334,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void pauseTrigger(TriggerKey triggerKey)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.pauseTrigger(triggerKey);
     }
 
@@ -370,17 +353,17 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void pauseJob(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.pauseJob(jobKey);
     }
 
-    /** 
+    /**
      * @see org.quartz.Scheduler#getPausedTriggerGroups()
      */
     public Set<String> getPausedTriggerGroups() throws SchedulerException {
         return sched.getPausedTriggerGroups();
     }
-    
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
@@ -396,7 +379,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void resumeTrigger(TriggerKey triggerKey)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.resumeTrigger(triggerKey);
     }
 
@@ -415,7 +398,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void resumeJob(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.resumeJob(jobKey);
     }
 
@@ -461,7 +444,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public List<? extends Trigger> getTriggersOfJob(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.getTriggersOfJob(jobKey);
     }
 
@@ -498,7 +481,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public JobDetail getJobDetail(JobKey jobKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.getJobDetail(jobKey);
     }
 
@@ -508,7 +491,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public Trigger getTrigger(TriggerKey triggerKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.getTrigger(triggerKey);
     }
 
@@ -518,7 +501,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public TriggerState getTriggerState(TriggerKey triggerKey)
-        throws SchedulerException {
+            throws SchedulerException {
         return sched.getTriggerState(triggerKey);
     }
 
@@ -547,7 +530,7 @@ public class StdScheduler implements Scheduler {
      * </p>
      */
     public void addCalendar(String calName, Calendar calendar, boolean replace, boolean updateTriggers)
-        throws SchedulerException {
+            throws SchedulerException {
         sched.addCalendar(calName, calendar, replace, updateTriggers);
     }
 
@@ -586,13 +569,14 @@ public class StdScheduler implements Scheduler {
     public boolean checkExists(JobKey jobKey) throws SchedulerException {
         return sched.checkExists(jobKey);
     }
-    
-   
+
+
     /**
      * <p>
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean checkExists(TriggerKey triggerKey) throws SchedulerException {
         return sched.checkExists(triggerKey);
     }
@@ -603,7 +587,6 @@ public class StdScheduler implements Scheduler {
     ///
     ///////////////////////////////////////////////////////////////////////////
 
-    
 
     /**
      * @see org.quartz.Scheduler#setJobFactory(org.quartz.spi.JobFactory)
@@ -615,17 +598,20 @@ public class StdScheduler implements Scheduler {
     /**
      * @see org.quartz.Scheduler#getListenerManager()
      */
+    @Override
     public ListenerManager getListenerManager() throws SchedulerException {
         return sched.getListenerManager();
     }
 
+    @Override
     public boolean interrupt(JobKey jobKey) throws UnableToInterruptJobException {
         return sched.interrupt(jobKey);
     }
 
+    @Override
     public boolean interrupt(String fireInstanceId) throws UnableToInterruptJobException {
         return sched.interrupt(fireInstanceId);
     }
 
-  
+
 }

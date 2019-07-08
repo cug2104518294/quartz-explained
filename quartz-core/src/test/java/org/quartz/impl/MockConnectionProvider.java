@@ -33,7 +33,8 @@ public class MockConnectionProvider implements ConnectionProvider {
 	private String customProperty; 
 	public static List<String> methodsCalled = new ArrayList<String>();
 	
-	public Connection getConnection() throws SQLException {
+	@Override
+    public Connection getConnection() throws SQLException {
 		methodsCalled.add("getConnection");
 		throw new MockSQLException("getConnection correctly called on MockConnectionProvider");
 	}

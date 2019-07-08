@@ -91,6 +91,7 @@ public class JTAJobRunShellFactory implements JobRunShellFactory {
      * {@link org.quartz.core.JobRunShell}</code>.
      * </p>
      */
+    @Override
     public JobRunShell createJobRunShell(TriggerFiredBundle bundle)
             throws SchedulerException {
         return new JTAJobRunShell(scheduler, bundle);

@@ -103,6 +103,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
 
+    @Override
     public void triggersPaused(String triggerGroup) {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -127,6 +128,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
     
+    @Override
     public void schedulingDataCleared() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -144,6 +146,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
 
+    @Override
     public void jobsPaused(String jobGroup) {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -176,6 +179,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
 
+    @Override
     public void schedulerStarted() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -184,6 +188,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
     
+    @Override
     public void schedulerStarting() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while (itr.hasNext()) {
@@ -192,6 +197,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
 
+    @Override
     public void schedulerInStandbyMode() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -200,6 +206,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
     
+    @Override
     public void schedulerShutdown() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {
@@ -208,6 +215,7 @@ public class BroadcastSchedulerListener implements SchedulerListener {
         }
     }
     
+    @Override
     public void schedulerShuttingdown() {
         Iterator<SchedulerListener> itr = listeners.iterator();
         while(itr.hasNext()) {

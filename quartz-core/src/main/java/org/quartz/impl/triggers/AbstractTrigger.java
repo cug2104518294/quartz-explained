@@ -65,14 +65,6 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
 
     private static final long serialVersionUID = -3904243490805975570L;
 
-    /*
-    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    *
-    * Data members.
-    *
-    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    */
-
     private String name;
 
     private String group = Scheduler.DEFAULT_GROUP;
@@ -249,6 +241,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
         this.key = null;
     }
 
+    @Override
     public void setKey(TriggerKey key) {
         setName(key.getName());
         setGroup(key.getGroup());
@@ -315,6 +308,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
         this.jobGroup = jobGroup;
     }
 
+    @Override
     public void setJobKey(JobKey key) {
         setJobName(key.getName());
         setJobGroup(key.getGroup());
@@ -366,6 +360,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @return null if no description was set.
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -377,6 +372,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * description has no meaning to Quartz.
      * </p>
      */
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -390,6 +386,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * @param calendarName
      *          use <code>null</code> to dis-associate a Calendar.
      */
+    @Override
     public void setCalendarName(String calendarName) {
         this.calendarName = calendarName;
     }
@@ -402,6 +399,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @return <code>null</code> if there is no associated Calendar.
      */
+    @Override
     public String getCalendarName() {
         return calendarName;
     }
@@ -431,6 +429,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * <code>Trigger</code>.
      * </p>
      */
+    @Override
     public void setJobDataMap(JobDataMap jobDataMap) {
         this.jobDataMap = jobDataMap;
     }
@@ -464,6 +463,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @see #DEFAULT_PRIORITY
      */
+    @Override
     public void setPriority(int priority) {
         this.priority = priority;
     }
@@ -482,6 +482,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @see #executionComplete(JobExecutionContext, JobExecutionException)
      */
+    @Override
     public abstract void triggered(Calendar calendar);
 
     /**
@@ -505,6 +506,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      *         will return (until after the first firing of the <code>Trigger</code>).
      *         </p>
      */
+    @Override
     public abstract Date computeFirstFireTime(Calendar calendar);
 
     /**
@@ -584,6 +586,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * of the trigger.
      * </p>
      */
+    @Override
     public abstract void setStartTime(Date startTime);
 
     /**
@@ -595,6 +598,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(org.quartz.spi.OperableTrigger, org.quartz.Calendar, int)
      */ 
+    @Override
     public abstract void setEndTime(Date endTime);
 
     /**
@@ -672,6 +676,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * @see SimpleTrigger
      * @see CronTrigger
      */
+    @Override
     public void setMisfireInstruction(int misfireInstruction) {
         if (!validateMisfireInstruction(misfireInstruction)) {
             throw new IllegalArgumentException(
@@ -700,6 +705,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * @see SimpleTrigger
      * @see CronTrigger
      */
+    @Override
     public int getMisfireInstruction() {
         return misfireInstruction;
     }
@@ -719,6 +725,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * was created.
      * </p>
      */
+    @Override
     public abstract void updateAfterMisfire(Calendar cal);
 
     /**
@@ -739,6 +746,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      * @param cal the modifying calendar
      */
+    @Override
     public abstract void updateWithNewCalendar(Calendar cal, long misfireThreshold);
 
     /**
@@ -750,6 +758,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      *           if a required property (such as Name, Group, Class) is not
      *           set.
      */
+    @Override
     public void validate() throws SchedulerException {
         if (name == null) {
             throw new SchedulerException("Trigger's name cannot be null");
@@ -783,6 +792,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * 
      *  
      */
+    @Override
     public void setFireInstanceId(String id) {
         this.fireInstanceId = id;
     }
@@ -792,6 +802,7 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * This method should not be used by the Quartz client.
      * </p>
      */
+    @Override
     public String getFireInstanceId() {
         return fireInstanceId;
     }

@@ -625,6 +625,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * <b>This method should not be invoked by client code.</b>
      * </p>
      */
+    @Override
     public void setNextFireTime(Date nextFireTime) {
         this.nextFireTime = nextFireTime;
     }
@@ -638,6 +639,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * <b>This method should not be invoked by client code.</b>
      * </p>
      */
+    @Override
     public void setPreviousFireTime(Date previousFireTime) {
         this.previousFireTime = previousFireTime;
     }

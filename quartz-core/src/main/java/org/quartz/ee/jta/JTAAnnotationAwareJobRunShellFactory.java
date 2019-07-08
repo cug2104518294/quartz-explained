@@ -95,6 +95,7 @@ public class JTAAnnotationAwareJobRunShellFactory implements JobRunShellFactory 
      * {@link org.quartz.core.JobRunShell}</code>.
      * </p>
      */
+    @Override
     public JobRunShell createJobRunShell(TriggerFiredBundle bundle)
             throws SchedulerException {
         ExecuteInJTATransaction jtaAnnotation = ClassUtils.getAnnotation(bundle.getJobDetail().getJobClass(), ExecuteInJTATransaction.class);

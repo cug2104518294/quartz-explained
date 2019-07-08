@@ -133,6 +133,7 @@ public class JNDIConnectionProvider implements ConnectionProvider {
         }
     }
 
+    @Override
     public Connection getConnection() throws SQLException {
         Context ctx = null;
         try {

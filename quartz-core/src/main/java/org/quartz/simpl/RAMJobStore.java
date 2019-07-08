@@ -159,14 +159,17 @@ public class RAMJobStore implements JobStore {
         getLog().info("RAMJobStore initialized.");
     }
 
+    @Override
     public void schedulerStarted() {
         // nothing to do
     }
 
+    @Override
     public void schedulerPaused() {
         // nothing to do
     }
     
+    @Override
     public void schedulerResumed() {
         // nothing to do
     }
@@ -200,6 +203,7 @@ public class RAMJobStore implements JobStore {
     public void shutdown() {
     }
 
+    @Override
     public boolean supportsPersistence() {
         return false;
     }
@@ -1766,6 +1770,7 @@ public class RAMJobStore implements JobStore {
         return 5;
     }
 
+    @Override
     public boolean isClustered() {
         return false;
     }

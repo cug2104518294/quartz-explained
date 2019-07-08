@@ -1,58 +1,18 @@
-/*
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- *
- */
-
 package org.quartz.utils;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * <p>
  * An implementation of <code>Map</code> that wraps another <code>Map</code>
  * and flags itself 'dirty' when it is modified.
- * </p>
- *
- * @author James House
  */
-public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializable {
+public class DirtyFlagMap<K, V> implements Map<K, V>, Cloneable, java.io.Serializable {
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Data members.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
     private static final long serialVersionUID = 1433884852607126222L;
 
     private boolean dirty = false;
-    private Map<K,V> map;
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Constructors.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
+    private Map<K, V> map;
 
     /**
      * <p>
@@ -62,7 +22,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * @see java.util.HashMap
      */
     public DirtyFlagMap() {
-        map = new HashMap<K,V>();
+        map = new HashMap<>();
     }
 
     /**
@@ -74,7 +34,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * @see java.util.HashMap
      */
     public DirtyFlagMap(final int initialCapacity) {
-        map = new HashMap<K,V>(initialCapacity);
+        map = new HashMap<>(initialCapacity);
     }
 
     /**
@@ -86,16 +46,8 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * @see java.util.HashMap
      */
     public DirtyFlagMap(final int initialCapacity, final float loadFactor) {
-        map = new HashMap<K,V>(initialCapacity, loadFactor);
+        map = new HashMap<>(initialCapacity, loadFactor);
     }
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Interface.
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
@@ -120,10 +72,11 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * Get a direct handle to the underlying Map.
      * </p>
      */
-    public Map<K,V> getWrappedMap() {
+    public Map<K, V> getWrappedMap() {
         return map;
     }
 
+    @Override
     public void clear() {
         if (!map.isEmpty()) {
             dirty = true;
@@ -131,15 +84,18 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
         map.clear();
     }
 
+    @Override
     public boolean containsKey(final Object key) {
         return map.containsKey(key);
     }
 
+    @Override
     public boolean containsValue(final Object val) {
         return map.containsValue(val);
     }
 
-    public Set<Entry<K,V>> entrySet() {
+    @Override
+    public Set<Entry<K, V>> entrySet() {
         return new DirtyFlagMapEntrySet(map.entrySet());
     }
 
@@ -149,12 +105,11 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             return false;
         }
 
-        return map.equals(((DirtyFlagMap<?,?>) obj).getWrappedMap());
+        return map.equals(((DirtyFlagMap<?, ?>) obj).getWrappedMap());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return map.hashCode();
     }
 
@@ -205,11 +160,11 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
     @Override
     @SuppressWarnings("unchecked") // suppress warnings on generic cast of super.clone() and map.clone() lines.
     public Object clone() {
-        DirtyFlagMap<K,V> copy;
+        DirtyFlagMap<K, V> copy;
         try {
-            copy = (DirtyFlagMap<K,V>) super.clone();
+            copy = (DirtyFlagMap<K, V>) super.clone();
             if (map instanceof HashMap) {
-                copy.map = (Map<K,V>)((HashMap<K,V>)map).clone();
+                copy.map = (Map<K, V>) ((HashMap<K, V>) map).clone();
             }
         } catch (CloneNotSupportedException ex) {
             throw new IncompatibleClassChangeError("Not Cloneable.");
@@ -223,6 +178,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * the underlying Collection is modified.
      */
     private class DirtyFlagCollection<T> implements Collection<T> {
+
         private Collection<T> collection;
 
         public DirtyFlagCollection(final Collection<T> c) {
@@ -233,10 +189,12 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             return collection;
         }
 
+        @Override
         public Iterator<T> iterator() {
             return new DirtyFlagIterator<T>(collection.iterator());
         }
 
+        @Override
         public boolean remove(final Object o) {
             boolean removed = collection.remove(o);
             if (removed) {
@@ -245,6 +203,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             return removed;
         }
 
+        @Override
         public boolean removeAll(final Collection<?> c) {
             boolean changed = collection.removeAll(c);
             if (changed) {
@@ -253,6 +212,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             return changed;
         }
 
+        @Override
         public boolean retainAll(final Collection<?> c) {
             boolean changed = collection.retainAll(c);
             if (changed) {
@@ -261,6 +221,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             return changed;
         }
 
+        @Override
         public void clear() {
             if (collection.isEmpty() == false) {
                 dirty = true;
@@ -269,14 +230,45 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
         }
 
         // Pure wrapper methods
-        public int size() { return collection.size(); }
-        public boolean isEmpty() { return collection.isEmpty(); }
-        public boolean contains(final Object o) { return collection.contains(o); }
-        public boolean add(final T o) { return collection.add(o); } // Not supported
-        public boolean addAll(final Collection<? extends T> c) { return collection.addAll(c); } // Not supported
-        public boolean containsAll(final Collection<?> c) { return collection.containsAll(c); }
-        public Object[] toArray() { return collection.toArray(); }
-        public <U> U[] toArray(final U[] array) { return collection.toArray(array); }
+        @Override
+        public int size() {
+            return collection.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return collection.isEmpty();
+        }
+
+        @Override
+        public boolean contains(final Object o) {
+            return collection.contains(o);
+        }
+
+        @Override
+        public boolean add(final T o) {
+            return collection.add(o);
+        } // Not supported
+
+        @Override
+        public boolean addAll(final Collection<? extends T> c) {
+            return collection.addAll(c);
+        } // Not supported
+
+        @Override
+        public boolean containsAll(final Collection<?> c) {
+            return collection.containsAll(c);
+        }
+
+        @Override
+        public Object[] toArray() {
+            return collection.toArray();
+        }
+
+        @Override
+        public <U> U[] toArray(final U[] array) {
+            return collection.toArray(array);
+        }
     }
 
     /**
@@ -289,7 +281,7 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
         }
 
         protected Set<T> getWrappedSet() {
-            return (Set<T>)getWrappedCollection();
+            return (Set<T>) getWrappedCollection();
         }
     }
 
@@ -304,14 +296,22 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             this.iterator = iterator;
         }
 
+        @Override
         public void remove() {
             dirty = true;
             iterator.remove();
         }
 
         // Pure wrapper methods
-        public boolean hasNext() { return iterator.hasNext(); }
-        public T next() { return iterator.next(); }
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public T next() {
+            return iterator.next();
+        }
     }
 
     /**
@@ -319,14 +319,14 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * the Set is modified, and return Map.Entry objects
      * wrapped in the <code>DirtyFlagMapEntry</code> class.
      */
-    private class DirtyFlagMapEntrySet extends DirtyFlagSet<Map.Entry<K,V>> {
+    private class DirtyFlagMapEntrySet extends DirtyFlagSet<Map.Entry<K, V>> {
 
-        public DirtyFlagMapEntrySet(final Set<Map.Entry<K,V>> set) {
+        public DirtyFlagMapEntrySet(final Set<Map.Entry<K, V>> set) {
             super(set);
         }
 
         @Override
-        public Iterator<Map.Entry<K,V>> iterator() {
+        public Iterator<Map.Entry<K, V>> iterator() {
             return new DirtyFlagMapEntryIterator(getWrappedSet().iterator());
         }
 
@@ -345,12 +345,12 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
             int size = super.size();
 
             U[] result =
-                array.length < size ?
-                    (U[])Array.newInstance(array.getClass().getComponentType(), size) : array;
+                    array.length < size ?
+                            (U[]) Array.newInstance(array.getClass().getComponentType(), size) : array;
 
-            Iterator<Map.Entry<K,V>> entryIter = iterator(); // Will return DirtyFlagMapEntry objects
+            Iterator<Map.Entry<K, V>> entryIter = iterator(); // Will return DirtyFlagMapEntry objects
             for (int i = 0; i < size; i++) {
-                result[i] = ( U ) entryIter.next();
+                result[i] = (U) entryIter.next();
             }
 
             if (result.length > size) {
@@ -365,8 +365,8 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * Wrap an Iterator over Map.Entry objects so that we can
      * mark the Map as dirty if an element is removed or modified.
      */
-    private class DirtyFlagMapEntryIterator extends DirtyFlagIterator<Map.Entry<K,V>> {
-        public DirtyFlagMapEntryIterator(final Iterator<Map.Entry<K,V>> iterator) {
+    private class DirtyFlagMapEntryIterator extends DirtyFlagIterator<Map.Entry<K, V>> {
+        public DirtyFlagMapEntryIterator(final Iterator<Map.Entry<K, V>> iterator) {
             super(iterator);
         }
 
@@ -380,22 +380,34 @@ public class DirtyFlagMap<K,V> implements Map<K,V>, Cloneable, java.io.Serializa
      * Wrap a Map.Entry so we can mark the Map as dirty if
      * a value is set.
      */
-    private class DirtyFlagMapEntry implements Map.Entry<K,V> {
-        private Map.Entry<K,V> entry;
+    private class DirtyFlagMapEntry implements Map.Entry<K, V> {
+        private Map.Entry<K, V> entry;
 
-        public DirtyFlagMapEntry(final Map.Entry<K,V> entry) {
+        public DirtyFlagMapEntry(final Map.Entry<K, V> entry) {
             this.entry = entry;
         }
 
+        @Override
         public V setValue(final V o) {
             dirty = true;
             return entry.setValue(o);
         }
 
         // Pure wrapper methods
-        public K getKey() { return entry.getKey(); }
-        public V getValue() { return entry.getValue(); }
-        public boolean equals(Object o) { return entry.equals(o); }
+        @Override
+        public K getKey() {
+            return entry.getKey();
+        }
+
+        @Override
+        public V getValue() {
+            return entry.getValue();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return entry.equals(o);
+        }
     }
 }
 

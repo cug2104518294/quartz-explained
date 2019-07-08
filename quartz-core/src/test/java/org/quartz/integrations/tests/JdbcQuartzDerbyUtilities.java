@@ -220,6 +220,7 @@ public final class JdbcQuartzDerbyUtilities {
 
 
 
+        @Override
         public Connection getConnection() throws SQLException {
             return DriverManager.getConnection(DATABASE_CONNECTION_PREFIX , PROPS);
         }

@@ -1,30 +1,12 @@
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz.utils;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.quartz.SchedulerException;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import org.quartz.SchedulerException;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * <p>
@@ -36,68 +18,46 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * This class uses C3PO (http://www.mchange.com/projects/c3p0/index.html) as
  * the underlying pool implementation.</p>
  *
- * @see DBConnectionManager
- * @see ConnectionProvider
- *
  * @author Sharada Jambula
  * @author James House
  * @author Mohammad Rezaei
+ * @see DBConnectionManager
+ * @see ConnectionProvider
  */
 public class C3p0PoolingConnectionProvider implements PoolingConnectionProvider {
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Constants.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
     /**
      * The maximum number of prepared statements that will be cached per connection in the pool.
-     * Depending upon your JDBC Driver this may significantly help performance, or may slightly 
-     * hinder performance.   
-     * Default is 120, as Quartz uses over 100 unique statements. 0 disables the feature. 
+     * Depending upon your JDBC Driver this may significantly help performance, or may slightly
+     * hinder performance.
+     * Default is 120, as Quartz uses over 100 unique statements. 0 disables the feature.
      */
     public static final String DB_MAX_CACHED_STATEMENTS_PER_CONNECTION = "maxCachedStatementsPerConnection";
 
     /**
      * The number of seconds between tests of idle connections - only enabled
-     * if the validation query property is set.  Default is 50 seconds. 
+     * if the validation query property is set.  Default is 50 seconds.
      */
     public static final String DB_IDLE_VALIDATION_SECONDS = "idleConnectionValidationSeconds";
 
     /**
-     * Whether the database sql query to validate connections should be executed every time 
+     * Whether the database sql query to validate connections should be executed every time
      * a connection is retrieved from the pool to ensure that it is still valid.  If false,
-     * then validation will occur on check-in.  Default is false. 
+     * then validation will occur on check-in.  Default is false.
      */
     public static final String DB_VALIDATE_ON_CHECKOUT = "validateOnCheckout";
 
-    /** Discard connections after they have been idle this many seconds.  0 disables the feature. Default is 0.*/
+    /**
+     * Discard connections after they have been idle this many seconds.  0 disables the feature. Default is 0.
+     */
     public static final String DB_DISCARD_IDLE_CONNECTIONS_SECONDS = "maxIdleTime";
 
-    /** Default maximum number of database connections in the pool. */
+    /**
+     * Default maximum number of database connections in the pool.
+     */
     public static final int DEFAULT_DB_MAX_CACHED_STATEMENTS_PER_CONNECTION = 120;
 
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Data members.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
     private ComboPooledDataSource datasource;
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Constructors.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     public C3p0PoolingConnectionProvider(String dbDriver, String dbURL,
                                          String dbUser, String dbPassword, int maxConnections,
@@ -123,8 +83,7 @@ public class C3p0PoolingConnectionProvider implements PoolingConnectionProvider 
      * </UL>
      * </p>
      *
-     * @param config
-     *            configuration properties
+     * @param config configuration properties
      */
     public C3p0PoolingConnectionProvider(Properties config) throws SchedulerException, SQLException {
         PropertiesParser cfg = new PropertiesParser(config);
@@ -140,18 +99,11 @@ public class C3p0PoolingConnectionProvider implements PoolingConnectionProvider 
                 cfg.getIntProperty(DB_IDLE_VALIDATION_SECONDS, 50),
                 cfg.getIntProperty(DB_DISCARD_IDLE_CONNECTIONS_SECONDS, 0));
     }
-    
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Interface.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
-     * Create the underlying C3PO ComboPooledDataSource with the 
+     * Create the underlying C3PO ComboPooledDataSource with the
      * default supported properties.
+     *
      * @throws SchedulerException
      */
     private void initialize(
@@ -199,10 +151,11 @@ public class C3p0PoolingConnectionProvider implements PoolingConnectionProvider 
 
         if (dbValidationQuery != null) {
             datasource.setPreferredTestQuery(dbValidationQuery);
-            if(!validateOnCheckout)
+            if (!validateOnCheckout) {
                 datasource.setTestConnectionOnCheckin(true);
-            else
+            } else {
                 datasource.setTestConnectionOnCheckout(true);
+            }
             datasource.setIdleConnectionTestPeriod(idleValidationSeconds);
         }
     }
@@ -211,22 +164,26 @@ public class C3p0PoolingConnectionProvider implements PoolingConnectionProvider 
      * Get the C3PO ComboPooledDataSource created during initialization.
      *
      * <p>
-     * This can be used to set additional data source properties in a 
+     * This can be used to set additional data source properties in a
      * subclass's constructor.
      * </p>
      */
+    @Override
     public ComboPooledDataSource getDataSource() {
         return datasource;
     }
 
+    @Override
     public Connection getConnection() throws SQLException {
         return datasource.getConnection();
     }
 
+    @Override
     public void shutdown() throws SQLException {
         datasource.close();
     }
 
+    @Override
     public void initialize() throws SQLException {
         // do nothing, already initialized during constructor call
     }

@@ -1,44 +1,19 @@
-
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz;
 
 /**
  * The interface to be implemented by classes that want to be informed of major
  * <code>{@link Scheduler}</code> events.
- *
+ * <p>
+ * <p>
  * Scheduler的listener接口，建议继承{@link org.quartz.listeners.SchedulerListenerSupport}
- * 
+ *
+ * @author James House
  * @see Scheduler
  * @see JobListener
  * @see TriggerListener
- * 
- * @author James House
  */
 public interface SchedulerListener {
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Interface.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
@@ -53,7 +28,7 @@ public interface SchedulerListener {
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link org.quartz.JobDetail}</code>
      * is unscheduled.
      * </p>
-     * 
+     *
      * @see SchedulerListener#schedulingDataCleared()
      */
     void jobUnscheduled(TriggerKey triggerKey);
@@ -63,7 +38,7 @@ public interface SchedulerListener {
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link Trigger}</code>
      * has reached the condition in which it will never fire again.
      * </p>
-     *
+     * <p>
      * trigger终止执行时调用
      */
     void triggerFinalized(Trigger trigger);
@@ -78,16 +53,16 @@ public interface SchedulerListener {
 
     /**
      * <p>
-     * Called by the <code>{@link Scheduler}</code> when a 
+     * Called by the <code>{@link Scheduler}</code> when a
      * group of <code>{@link Trigger}s</code> has been paused.
      * </p>
-     * 
+     *
      * <p>If all groups were paused then triggerGroup will be null</p>
-     * 
+     *
      * @param triggerGroup the paused group, or null if all were paused
      */
     void triggersPaused(String triggerGroup);
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link Trigger}</code>
@@ -98,7 +73,7 @@ public interface SchedulerListener {
 
     /**
      * <p>
-     * Called by the <code>{@link Scheduler}</code> when a 
+     * Called by the <code>{@link Scheduler}</code> when a
      * group of <code>{@link Trigger}s</code> has been un-paused.
      * </p>
      */
@@ -111,7 +86,7 @@ public interface SchedulerListener {
      * </p>
      */
     void jobAdded(JobDetail jobDetail);
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link org.quartz.JobDetail}</code>
@@ -119,7 +94,7 @@ public interface SchedulerListener {
      * </p>
      */
     void jobDeleted(JobKey jobKey);
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link org.quartz.JobDetail}</code>
@@ -130,14 +105,14 @@ public interface SchedulerListener {
 
     /**
      * <p>
-     * Called by the <code>{@link Scheduler}</code> when a 
+     * Called by the <code>{@link Scheduler}</code> when a
      * group of <code>{@link org.quartz.JobDetail}s</code> has been paused.
      * </p>
-     * 
+     *
      * @param jobGroup the paused group, or null if all were paused
      */
     void jobsPaused(String jobGroup);
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> when a <code>{@link org.quartz.JobDetail}</code>
@@ -148,7 +123,7 @@ public interface SchedulerListener {
 
     /**
      * <p>
-     * Called by the <code>{@link Scheduler}</code> when a 
+     * Called by the <code>{@link Scheduler}</code> when a
      * group of <code>{@link org.quartz.JobDetail}s</code> has been un-paused.
      * </p>
      */
@@ -161,7 +136,7 @@ public interface SchedulerListener {
      * or the inability to instantiate a <code>Job</code> instance when its
      * <code>Trigger</code> has fired.
      * </p>
-     * 
+     *
      * <p>
      * The <code>getErrorCode()</code> method of the given SchedulerException
      * can be used to determine more specific information about the type of
@@ -185,7 +160,7 @@ public interface SchedulerListener {
      * </p>
      */
     void schedulerStarted();
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> to inform the listener
@@ -193,7 +168,7 @@ public interface SchedulerListener {
      * </p>
      */
     void schedulerStarting();
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> to inform the listener
@@ -201,7 +176,7 @@ public interface SchedulerListener {
      * </p>
      */
     void schedulerShutdown();
-    
+
     /**
      * <p>
      * Called by the <code>{@link Scheduler}</code> to inform the listener

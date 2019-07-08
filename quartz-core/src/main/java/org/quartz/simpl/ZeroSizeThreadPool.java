@@ -1,33 +1,16 @@
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz.simpl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.quartz.SchedulerConfigException;
 import org.quartz.spi.ThreadPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
  * This is class is a simple implementation of a zero size thread pool, based on the
  * <code>{@link org.quartz.spi.ThreadPool}</code> interface.
  * </p>
- * 
+ *
  * <p>
  * The pool has zero <code>Thread</code>s and does not grow or shrink based on demand.
  * Which means it is obviously not useful for most scenarios.  When it may be useful
@@ -36,33 +19,17 @@ import org.quartz.spi.ThreadPool;
  * instance only exists in order to schedule jobs, but which will never execute
  * jobs (e.g. will never have start() called on it).
  * </p>
- *
- *
+ * <p>
+ * <p>
  * 线程池的大小为0，不会伸缩，所以在绝大部分场景下该线程池都是用不到的。
- *
+ * <p>
  * 唯一可能用到的场景：scheduler只是用于调度job，而不执行job。
  *
  * @author Wayne Fay
  */
 public class ZeroSizeThreadPool implements ThreadPool {
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Data members.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
     private final Logger log = LoggerFactory.getLogger(getClass());
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Constructors.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
@@ -72,22 +39,16 @@ public class ZeroSizeThreadPool implements ThreadPool {
     public ZeroSizeThreadPool() {
     }
 
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Interface.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
     public Logger getLog() {
         return log;
     }
 
+    @Override
     public int getPoolSize() {
         return 0;
     }
 
+    @Override
     public void initialize() throws SchedulerConfigException {
     }
 
@@ -95,22 +56,26 @@ public class ZeroSizeThreadPool implements ThreadPool {
         shutdown(true);
     }
 
+    @Override
     public void shutdown(boolean waitForJobsToComplete) {
         getLog().debug("shutdown complete");
     }
 
+    @Override
     public boolean runInThread(Runnable runnable) {
         throw new UnsupportedOperationException("This ThreadPool should not be used on Scheduler instances that are start()ed.");
     }
 
+    @Override
     public int blockForAvailableThreads() {
         throw new UnsupportedOperationException("This ThreadPool should not be used on Scheduler instances that are start()ed.");
     }
 
+    @Override
     public void setInstanceId(String schedInstId) {
     }
 
+    @Override
     public void setInstanceName(String schedName) {
     }
-
 }
