@@ -860,10 +860,12 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
     
     // JobListener
 
+    @Override
     public String getName() {
         return "QuartzSchedulerMBeanImpl.listener";
     }
 
+    @Override
     public void jobExecutionVetoed(JobExecutionContext context) {
         try {
             sendNotification(JOB_EXECUTION_VETOED, JobExecutionContextSupport
@@ -873,6 +875,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         }
     }
 
+    @Override
     public void jobToBeExecuted(JobExecutionContext context) {
         try {
             sendNotification(JOB_TO_BE_EXECUTED, JobExecutionContextSupport
@@ -882,8 +885,9 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
         }
     }
 
+    @Override
     public void jobWasExecuted(JobExecutionContext context,
-            JobExecutionException jobException) {
+                               JobExecutionException jobException) {
         try {
             sendNotification(JOB_WAS_EXECUTED, JobExecutionContextSupport
                     .toCompositeData(context));

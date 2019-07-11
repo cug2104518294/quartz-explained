@@ -101,18 +101,15 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
         shutdownRequested = true;
     }
 
+    @Override
     public void run() {
         qs.addInternalSchedulerListener(this);
-
         try {
             OperableTrigger trigger = (OperableTrigger) jec.getTrigger();
             JobDetail jobDetail = jec.getJobDetail();
-
             do {
-
                 JobExecutionException jobExEx = null;
                 Job job = jec.getJobInstance();
-
                 try {
                     begin();
                 } catch (SchedulerException se) {

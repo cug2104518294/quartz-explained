@@ -49,7 +49,7 @@ public interface JobExecutionContext {
      * <code>Job</code>.
      * </p>
      */
-    public Scheduler getScheduler();
+    Scheduler getScheduler();
 
     /**
      * <p>
@@ -57,7 +57,7 @@ public interface JobExecutionContext {
      * <code>Job</code>.
      * </p>
      */
-    public Trigger getTrigger();
+    Trigger getTrigger();
 
     /**
      * <p>
@@ -65,7 +65,7 @@ public interface JobExecutionContext {
      * instance that fired the <code>Job</code>.
      * </p>
      */
-    public Calendar getCalendar();
+    Calendar getCalendar();
 
     /**
      * <p>
@@ -73,7 +73,7 @@ public interface JobExecutionContext {
      * situation, this method will return <code>true</code>.
      * </p>
      */
-    public boolean isRecovering();
+    boolean isRecovering();
 
     /**
      * Return the {@code TriggerKey} of the originally scheduled and now recovering job.
@@ -88,9 +88,9 @@ public interface JobExecutionContext {
      * @return the recovering trigger details
      * @throws IllegalStateException if this is not a recovering job.
      */
-    public TriggerKey getRecoveringTriggerKey() throws IllegalStateException;
+    TriggerKey getRecoveringTriggerKey() throws IllegalStateException;
 
-    public int getRefireCount();
+    int getRefireCount();
 
     /**
      * <p>
@@ -116,14 +116,14 @@ public interface JobExecutionContext {
      * <code>IllegalStateException</code>.
      * </p>
      */
-    public JobDataMap getMergedJobDataMap();
+    JobDataMap getMergedJobDataMap();
 
     /**
      * <p>
      * Get the <code>JobDetail</code> associated with the <code>Job</code>.
      * </p>
      */
-    public JobDetail getJobDetail();
+    JobDetail getJobDetail();
 
     /**
      * <p>
@@ -136,7 +136,7 @@ public interface JobExecutionContext {
      * interfaces.
      * </p>
      */
-    public Job getJobInstance();
+    Job getJobInstance();
 
     /**
      * The actual time the trigger fired. For instance the scheduled time may
@@ -146,7 +146,7 @@ public interface JobExecutionContext {
      * @return Returns the fireTime.
      * @see #getScheduledFireTime()
      */
-    public Date getFireTime();
+    Date getFireTime();
 
     /**
      * The scheduled time the trigger fired for. For instance the scheduled
@@ -156,11 +156,11 @@ public interface JobExecutionContext {
      * @return Returns the scheduledFireTime.
      * @see #getFireTime()
      */
-    public Date getScheduledFireTime();
+    Date getScheduledFireTime();
 
-    public Date getPreviousFireTime();
+    Date getPreviousFireTime();
 
-    public Date getNextFireTime();
+    Date getNextFireTime();
 
     /**
      * Get the unique Id that identifies this particular firing instance of the
@@ -170,7 +170,7 @@ public interface JobExecutionContext {
      * @return the unique fire instance id
      * @see Scheduler#interrupt(String)
      */
-    public String getFireInstanceId();
+    String getFireInstanceId();
 
     /**
      * Returns the result (if any) that the <code>Job</code> set before its
@@ -186,7 +186,7 @@ public interface JobExecutionContext {
      *
      * @return Returns the result.
      */
-    public Object getResult();
+    Object getResult();
 
     /**
      * Set the result (if any) of the <code>Job</code>'s execution (the type of
@@ -199,7 +199,7 @@ public interface JobExecutionContext {
      * execution.
      * </p>
      */
-    public void setResult(Object result);
+    void setResult(Object result);
 
     /**
      * The amount of time the job ran for (in milliseconds).  The returned
@@ -209,7 +209,7 @@ public interface JobExecutionContext {
      *
      * @return Returns the jobRunTime.
      */
-    public long getJobRunTime();
+    long getJobRunTime();
 
     /**
      * Put the specified value into the context's data map with the given key.
@@ -222,13 +222,13 @@ public interface JobExecutionContext {
      * @param key   the key for the associated value
      * @param value the value to store
      */
-    public void put(Object key, Object value);
+    void put(Object key, Object value);
 
     /**
      * Get the value with the given key from the context's data map.
      *
      * @param key the key for the desired value
      */
-    public Object get(Object key);
+    Object get(Object key);
 
 }

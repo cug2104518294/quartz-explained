@@ -76,6 +76,7 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
         return jobsScheduledCount.getMostRecentSample().getCounterValue();
     }
 
+    @Override
     public String getName() {
         return NAME;
     }
@@ -85,16 +86,19 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
         jobsScheduledCount.increment();
     }
     
+    @Override
     public void jobExecutionVetoed(JobExecutionContext context) {
         /**/
     }
 
+    @Override
     public void jobToBeExecuted(JobExecutionContext context) {
         jobsExecutingCount.increment();
     }
 
+    @Override
     public void jobWasExecuted(JobExecutionContext context,
-            JobExecutionException jobException) {
+                               JobExecutionException jobException) {
         jobsCompletedCount.increment();
     }
 

@@ -194,6 +194,7 @@ public abstract class JobStoreSupport implements JobStore, Constants {
         this.instanceName = instanceName;
     }
 
+    @Override
     public void setThreadPoolSize(final int poolSize) {
         //
     }

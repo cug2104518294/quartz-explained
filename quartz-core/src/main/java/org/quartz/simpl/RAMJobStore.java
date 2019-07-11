@@ -1667,6 +1667,7 @@ public class RAMJobStore implements JobStore {
         //
     }
 
+    @Override
     public void setThreadPoolSize(final int poolSize) {
         //
     }

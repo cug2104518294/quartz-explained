@@ -1154,11 +1154,12 @@ public class StdSchedulerFactory implements SchedulerFactory {
             if (js instanceof JobStoreSupport) {
                 JobStoreSupport jjs = (JobStoreSupport) js;
                 jjs.setDbRetryInterval(dbFailureRetry);
-                if (threadsInheritInitalizersClassLoader)
+                if (threadsInheritInitalizersClassLoader) {
                     jjs.setThreadsInheritInitializersClassLoadContext(threadsInheritInitalizersClassLoader);
-
+                }
                 jjs.setThreadExecutor(threadExecutor);
             }
+
 
             QuartzSchedulerResources rsrcs = new QuartzSchedulerResources();
             rsrcs.setName(schedName);
@@ -1196,9 +1197,11 @@ public class StdSchedulerFactory implements SchedulerFactory {
 
             rsrcs.setThreadPool(tp);
             if (tp instanceof SimpleThreadPool) {
-                if (threadsInheritInitalizersClassLoader)
+                if (threadsInheritInitalizersClassLoader) {
                     ((SimpleThreadPool) tp).setThreadsInheritContextClassLoaderOfInitializingThread(threadsInheritInitalizersClassLoader);
+                }
             }
+            //执行线程池启动
             tp.initialize();
             tpInited = true;
 
@@ -1209,22 +1212,20 @@ public class StdSchedulerFactory implements SchedulerFactory {
                 rsrcs.addSchedulerPlugin(plugins[i]);
             }
 
+            //调度线程在构造方法里面启动的
             qs = new QuartzScheduler(rsrcs, idleWaitTime, dbFailureRetry);
             qsInited = true;
 
             // Create Scheduler ref...
             Scheduler scheduler = instantiate(rsrcs, qs);
-
             // set job factory if specified
             if (jobFactory != null) {
                 qs.setJobFactory(jobFactory);
             }
-
             // Initialize plugins now that we have a Scheduler instance.
             for (int i = 0; i < plugins.length; i++) {
                 plugins[i].initialize(pluginNames[i], scheduler, loadHelper);
             }
-
             // add listeners
             for (int i = 0; i < jobListeners.length; i++) {
                 qs.getListenerManager().addJobListener(jobListeners[i], EverythingMatcher.allJobs());
@@ -1232,13 +1233,11 @@ public class StdSchedulerFactory implements SchedulerFactory {
             for (int i = 0; i < triggerListeners.length; i++) {
                 qs.getListenerManager().addTriggerListener(triggerListeners[i], EverythingMatcher.allTriggers());
             }
-
             // set scheduler context data...
             for (Object key : schedCtxtProps.keySet()) {
                 String val = schedCtxtProps.getProperty((String) key);
                 scheduler.getContext().put((String) key, val);
             }
-
             // fire up job store, and runshell factory
             js.setInstanceId(schedInstId);
             js.setInstanceName(schedName);
@@ -1309,7 +1308,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
     }
 
     protected Scheduler instantiate(QuartzSchedulerResources rsrcs, QuartzScheduler qs) {
-
         Scheduler scheduler = new StdScheduler(qs);
         return scheduler;
     }

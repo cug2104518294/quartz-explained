@@ -29,7 +29,7 @@ public interface SchedulerFactory {
     /**
      * <p>
      * Returns handles to all known Schedulers (made by any SchedulerFactory
-     * within this jvm.).
+     * within this jvm.)
      * </p>
      */
     Collection<Scheduler> getAllSchedulers() throws SchedulerException;

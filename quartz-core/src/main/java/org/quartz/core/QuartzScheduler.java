@@ -127,10 +127,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    // private static final Map<String, ManagementServer> MGMT_SVR_BY_BIND = new
-    // HashMap<String, ManagementServer>();
-    // private String registeredManagementServerBind;
-
     /**
      * <p>
      * Create a <code>QuartzScheduler</code> with the given configuration
@@ -152,14 +148,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         if (idleWaitTime > 0) {
             this.schedThread.setIdleWaitTime(idleWaitTime);
         }
-
         jobMgr = new ExecutingJobsManager();
         addInternalJobListener(jobMgr);
         errLogger = new ErrorLogger();
         addInternalSchedulerListener(errLogger);
-
         signaler = new SchedulerSignalerImpl(this, this.schedThread);
-
         getLog().info("Quartz Scheduler v." + getVersion() + " created.");
     }
 
@@ -524,8 +517,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
      * <p>
      * The scheduler is not destroyed, and can be re-started at any time.
      * </p>
-     *
-     *
+     * <p>
+     * <p>
      * scheduler暂停
      */
     @Override
@@ -1603,7 +1596,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
             throw new IllegalArgumentException(
                     "JobListener name cannot be empty.");
         }
-
         synchronized (internalJobListeners) {
             internalJobListeners.put(jobListener.getName(), jobListener);
         }
@@ -1763,7 +1755,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         List<TriggerListener> allListeners = new LinkedList<TriggerListener>();
         allListeners.addAll(getListenerManager().getTriggerListeners());
         allListeners.addAll(getInternalTriggerListeners());
-
         return allListeners;
     }
 
@@ -1840,12 +1831,12 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
             throws SchedulerException {
         // build a list of all trigger listeners that are to be notified...
         List<TriggerListener> triggerListeners = buildTriggerListenerList();
-
         // notify all trigger listeners in the list
         for (TriggerListener tl : triggerListeners) {
             try {
-                if (!matchTriggerListener(tl, trigger.getKey()))
+                if (!matchTriggerListener(tl, trigger.getKey())) {
                     continue;
+                }
                 tl.triggerMisfired(trigger);
             } catch (Exception e) {
                 SchedulerException se = new SchedulerException(
@@ -2353,11 +2344,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ErrorLogger - Scheduler Listener Class
-//
-/////////////////////////////////////////////////////////////////////////////
 
 class ErrorLogger extends SchedulerListenerSupport {
     ErrorLogger() {
@@ -2370,20 +2356,16 @@ class ErrorLogger extends SchedulerListenerSupport {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ExecutingJobsManager - Job Listener Class
-//
-/////////////////////////////////////////////////////////////////////////////
 
 class ExecutingJobsManager implements JobListener {
-    HashMap<String, JobExecutionContext> executingJobs = new HashMap<String, JobExecutionContext>();
 
+    HashMap<String, JobExecutionContext> executingJobs = new HashMap<String, JobExecutionContext>();
     AtomicInteger numJobsFired = new AtomicInteger(0);
 
     ExecutingJobsManager() {
     }
 
+    @Override
     public String getName() {
         return getClass().getName();
     }
@@ -2394,15 +2376,16 @@ class ExecutingJobsManager implements JobListener {
         }
     }
 
+    @Override
     public void jobToBeExecuted(JobExecutionContext context) {
         numJobsFired.incrementAndGet();
-
         synchronized (executingJobs) {
             executingJobs
                     .put(((OperableTrigger) context.getTrigger()).getFireInstanceId(), context);
         }
     }
 
+    @Override
     public void jobWasExecuted(JobExecutionContext context,
                                JobExecutionException jobException) {
         synchronized (executingJobs) {
@@ -2421,6 +2404,7 @@ class ExecutingJobsManager implements JobListener {
         }
     }
 
+    @Override
     public void jobExecutionVetoed(JobExecutionContext context) {
 
     }

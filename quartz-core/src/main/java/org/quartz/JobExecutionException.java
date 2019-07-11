@@ -1,20 +1,3 @@
-/*
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz;
 
 /**
@@ -23,43 +6,26 @@ package org.quartz;
  * occurred while executing, and whether or not the <code>Job</code> requests
  * to be re-fired immediately (using the same <code>{@link JobExecutionContext}</code>,
  * or whether it wants to be unscheduled.
- * 
+ *
  * <p>
  * Note that if the flag for 'refire immediately' is set, the flags for
  * unscheduling the Job are ignored.
  * </p>
- * 
+ *
+ * @author James House
  * @see Job
  * @see JobExecutionContext
  * @see SchedulerException
- * 
- * @author James House
  */
 public class JobExecutionException extends SchedulerException {
 
     private static final long serialVersionUID = 1326342535829043325L;
-    
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Data members.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     private boolean refire = false;
 
     private boolean unscheduleTrigg = false;
 
     private boolean unscheduleAllTriggs = false;
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Constructors.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     /**
      * <p>
@@ -106,7 +72,6 @@ public class JobExecutionException extends SchedulerException {
      */
     public JobExecutionException(Throwable cause, boolean refireImmediately) {
         super(cause);
-
         refire = refireImmediately;
     }
 
@@ -119,7 +84,7 @@ public class JobExecutionException extends SchedulerException {
     public JobExecutionException(String msg, Throwable cause) {
         super(msg, cause);
     }
-    
+
     /**
      * <p>
      * Create a JobExcecutionException with the given message, and underlying
@@ -127,14 +92,13 @@ public class JobExecutionException extends SchedulerException {
      * </p>
      */
     public JobExecutionException(String msg, Throwable cause,
-            boolean refireImmediately) {
+                                 boolean refireImmediately) {
         super(msg, cause);
-
         refire = refireImmediately;
     }
-    
+
     /**
-     * Create a JobExcecutionException with the given message and the 're-fire 
+     * Create a JobExcecutionException with the given message and the 're-fire
      * immediately' flag set to the given value.
      */
     public JobExecutionException(String msg, boolean refireImmediately) {
@@ -142,14 +106,6 @@ public class JobExecutionException extends SchedulerException {
 
         refire = refireImmediately;
     }
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     * 
-     * Interface.
-     * 
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
 
     public void setRefireImmediately(boolean refire) {
         this.refire = refire;

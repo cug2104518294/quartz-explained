@@ -60,6 +60,7 @@ public class JobChainingJobListener extends JobListenerSupport {
         chainLinks = new HashMap<JobKey, JobKey>();
     }
 
+    @Override
     public String getName() {
         return name;
     }

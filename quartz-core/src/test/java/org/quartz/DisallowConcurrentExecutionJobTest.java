@@ -73,7 +73,8 @@ public class DisallowConcurrentExecutionJobTest {
 			this.jobExecutionCountToSyncAfter = jobExecutionCountToSyncAfter;
 		}
 		
-		public String getName() {
+		@Override
+        public String getName() {
 			return "TestJobListener";
 		}
 

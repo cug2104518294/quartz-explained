@@ -70,6 +70,7 @@ public class BroadcastJobListener implements JobListener {
         this.listeners.addAll(listeners);
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -98,6 +99,7 @@ public class BroadcastJobListener implements JobListener {
         return java.util.Collections.unmodifiableList(listeners);
     }
 
+    @Override
     public void jobToBeExecuted(JobExecutionContext context) {
 
         Iterator<JobListener> itr = listeners.iterator();
@@ -107,6 +109,7 @@ public class BroadcastJobListener implements JobListener {
         }
     }
 
+    @Override
     public void jobExecutionVetoed(JobExecutionContext context) {
 
         Iterator<JobListener> itr = listeners.iterator();
@@ -116,6 +119,7 @@ public class BroadcastJobListener implements JobListener {
         }
     }
 
+    @Override
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
 
         Iterator<JobListener> itr = listeners.iterator();

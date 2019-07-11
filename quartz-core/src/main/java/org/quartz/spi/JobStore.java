@@ -21,7 +21,7 @@ import java.util.Set;
  * Storage of <code>Job</code> s and <code>Trigger</code> s should be keyed
  * on the combination of their name and group for uniqueness.
  * </p>
- * <p>
+ *
  * JobStore的接口，为Job和Trigger提供存储机制
  *
  * @author James House
@@ -110,7 +110,7 @@ public interface JobStore {
     void storeJob(JobDetail newJob, boolean replaceExisting)
             throws ObjectAlreadyExistsException, JobPersistenceException;
 
-    public void storeJobsAndTriggers(Map<JobDetail, Set<? extends Trigger>> triggersAndJobs, boolean replace)
+    void storeJobsAndTriggers(Map<JobDetail, Set<? extends Trigger>> triggersAndJobs, boolean replace)
             throws ObjectAlreadyExistsException, JobPersistenceException;
 
     /**
