@@ -68,10 +68,12 @@ public class InitThreadContextClassLoadHelper implements ClassLoadHelper {
     /**
      * Return the class with the given name.
      */
+    @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         return initClassLoader.loadClass(name);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T> Class<? extends T> loadClass(String name, Class<T> clazz)
             throws ClassNotFoundException {
@@ -84,6 +86,7 @@ public class InitThreadContextClassLoadHelper implements ClassLoadHelper {
      * @param name name of the desired resource
      * @return a java.net.URL object
      */
+    @Override
     public URL getResource(String name) {
         return initClassLoader.getResource(name);
     }
@@ -94,6 +97,7 @@ public class InitThreadContextClassLoadHelper implements ClassLoadHelper {
      * @param name name of the desired resource
      * @return a java.io.InputStream object
      */
+    @Override
     public InputStream getResourceAsStream(String name) {
         return initClassLoader.getResourceAsStream(name);
     }
@@ -103,6 +107,7 @@ public class InitThreadContextClassLoadHelper implements ClassLoadHelper {
      *
      * @return the class-loader user be the helper.
      */
+    @Override
     public ClassLoader getClassLoader() {
         return this.initClassLoader;
     }

@@ -52,15 +52,18 @@ public class Qtz205SchedulerListenerTest {
 		public int getFireCount() {
 			return fireCount;
 		}
-		public String getName() {
+		@Override
+        public String getName() {
 			return "Qtz205TriggerListener";
 		}
 
+		@Override
 		public void triggerFired(Trigger trigger, JobExecutionContext context) {
 			fireCount++;
 			logger.info("Trigger fired. count " + fireCount);
 		}
 
+		@Override
 		public boolean vetoJobExecution(Trigger trigger, JobExecutionContext context) {
 			if (fireCount >= 3) {
 				logger.info("Job execution vetoed.");
@@ -70,12 +73,14 @@ public class Qtz205SchedulerListenerTest {
 			}
 		}
 
+		@Override
 		public void triggerMisfired(Trigger trigger) {
 		}
 
+		@Override
 		public void triggerComplete(Trigger trigger,
-				JobExecutionContext context,
-				CompletedExecutionInstruction triggerInstructionCode) {
+									JobExecutionContext context,
+									CompletedExecutionInstruction triggerInstructionCode) {
 		}
 		
 	}

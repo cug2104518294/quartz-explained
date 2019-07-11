@@ -1,31 +1,14 @@
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
- * under the License.
- * 
- */
-
 package org.quartz.spi;
 
-import java.net.URL;
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * An interface for classes wishing to provide the service of loading classes
  * and resources within the scheduler...
  *
  * <p>
- *  scheduler中加载类和资源的接口
+ * scheduler中加载类和资源的接口
  * </p>
  *
  * @author jhouse
@@ -57,7 +40,7 @@ public interface ClassLoadHelper {
      * @throws ClassNotFoundException if the class can be found in the classpath.
      */
     <T> Class<? extends T> loadClass(String name, Class<T> clazz) throws ClassNotFoundException;
-    
+
     /**
      * Finds a resource with a given name. This method returns null if no
      * resource with this name is found.

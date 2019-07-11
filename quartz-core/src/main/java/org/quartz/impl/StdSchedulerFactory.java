@@ -317,7 +317,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
      * </p>
      */
     public void initialize() throws SchedulerException {
-        // short-circuit if already initialized
         if (cfg != null) {
             return;
         }
@@ -326,6 +325,7 @@ public class StdSchedulerFactory implements SchedulerFactory {
         }
 
         String requestedFile = System.getProperty(PROPERTIES_FILE);
+
         String propFileName = requestedFile != null ? requestedFile
                 : "quartz.properties";
         File propFile = new File(propFileName);
@@ -352,8 +352,7 @@ public class StdSchedulerFactory implements SchedulerFactory {
                     throw initException;
                 }
             } else if (requestedFile != null) {
-                in =
-                        Thread.currentThread().getContextClassLoader().getResourceAsStream(requestedFile);
+                in = Thread.currentThread().getContextClassLoader().getResourceAsStream(requestedFile);
 
                 if (in == null) {
                     initException = new SchedulerException("Properties file: '"
@@ -365,6 +364,7 @@ public class StdSchedulerFactory implements SchedulerFactory {
 
                 in = new BufferedInputStream(in);
                 try {
+                    //Reads a property list (key and element pairs) from the input  byte stream.
                     props.load(in);
                 } catch (IOException ioe) {
                     initException = new SchedulerException("Properties file: '"
@@ -381,16 +381,12 @@ public class StdSchedulerFactory implements SchedulerFactory {
                     throw new SchedulerConfigException("Unable to find a class loader on the current thread or class.");
                 }
 
-                in = cl.getResourceAsStream(
-                        "quartz.properties");
-
+                in = cl.getResourceAsStream("quartz.properties");
                 if (in == null) {
-                    in = cl.getResourceAsStream(
-                            "/quartz.properties");
+                    in = cl.getResourceAsStream("/quartz.properties");
                 }
                 if (in == null) {
-                    in = cl.getResourceAsStream(
-                            "org/quartz/quartz.properties");
+                    in = cl.getResourceAsStream("org/quartz/quartz.properties");
                 }
                 if (in == null) {
                     initException = new SchedulerException(
@@ -655,7 +651,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
         Properties schedCtxtProps = cfg.getPropertyGroup(PROP_SCHED_CONTEXT_PREFIX, true);
 
         // If Proxying to remote scheduler, short-circuit here...
-        // ~~~~~~~~~~~~~~~~~~
         if (rmiProxy) {
             if (autoId) {
                 schedInstId = DEFAULT_INSTANCE_ID;
@@ -680,7 +675,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
         loadHelper.initialize();
 
         // If Proxying to remote JMX scheduler, short-circuit here...
-        // ~~~~~~~~~~~~~~~~~~
         if (jmxProxy) {
             if (autoId) {
                 schedInstId = DEFAULT_INSTANCE_ID;
@@ -781,8 +775,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
         }
 
         // Get JobStore Properties
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         String jsClass = cfg.getStringProperty(PROP_JOB_STORE_CLASS,
                 RAMJobStore.class.getName());
         if (jsClass == null) {
@@ -842,8 +834,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
         }
 
         // Set up any DataSources
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         String[] dsNames = cfg.getPropertyGroups(PROP_DATASOURCE_PREFIX);
         for (int i = 0; i < dsNames.length; i++) {
             PropertiesParser pp = new PropertiesParser(cfg.getPropertyGroup(
@@ -1308,10 +1298,11 @@ public class StdSchedulerFactory implements SchedulerFactory {
 
     private void shutdownFromInstantiateException(ThreadPool tp, QuartzScheduler qs, boolean tpInited, boolean qsInited) {
         try {
-            if (qsInited)
+            if (qsInited) {
                 qs.shutdown(false);
-            else if (tpInited)
+            } else if (tpInited) {
                 tp.shutdown(false);
+            }
         } catch (Exception e) {
             getLog().error("Got another exception while shutting down after instantiation exception", e);
         }
@@ -1328,14 +1319,21 @@ public class StdSchedulerFactory implements SchedulerFactory {
             throws NoSuchMethodException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException,
             IntrospectionException, SchedulerConfigException {
+
         props.remove("class");
         props.remove(PoolingConnectionProvider.POOLING_PROVIDER);
 
+        /**
+         * Use the BeanInfo interface to create a {@code BeanInfo} class
+         *  * and provide explicit information about the methods,
+         *  * properties, events, and other features of your beans.
+         * */
         BeanInfo bi = Introspector.getBeanInfo(obj.getClass());
         PropertyDescriptor[] propDescs = bi.getPropertyDescriptors();
         PropertiesParser pp = new PropertiesParser(props);
 
         java.util.Enumeration<Object> keys = props.keys();
+
         while (keys.hasMoreElements()) {
             String name = (String) keys.nextElement();
             String c = name.substring(0, 1).toUpperCase(Locale.US);
@@ -1393,7 +1391,6 @@ public class StdSchedulerFactory implements SchedulerFactory {
                                                   PropertyDescriptor[] props) {
         for (int i = 0; i < props.length; i++) {
             java.lang.reflect.Method wMeth = props[i].getWriteMethod();
-
             if (wMeth != null && wMeth.getName().equals(name)) {
                 return wMeth;
             }

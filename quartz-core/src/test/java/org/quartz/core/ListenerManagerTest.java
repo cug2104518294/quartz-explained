@@ -60,6 +60,7 @@ public class ListenerManagerTest extends TestCase {
             this.name = name;
         }
         
+        @Override
         public String getName() {
             return name;
         }

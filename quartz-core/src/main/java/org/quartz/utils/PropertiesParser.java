@@ -6,6 +6,7 @@ import java.util.*;
  * This is an utility class used to parse the properties.
  **/
 public class PropertiesParser {
+
     Properties props = null;
 
     public PropertiesParser(Properties props) {
@@ -49,15 +50,14 @@ public class PropertiesParser {
         if (vals == null) {
             return def;
         }
-
         StringTokenizer stok = new StringTokenizer(vals, ",");
         ArrayList<String> strs = new ArrayList<String>();
         try {
+            //类似迭代器
             while (stok.hasMoreTokens()) {
                 strs.add(stok.nextToken().trim());
             }
-
-            return (String[]) strs.toArray(new String[strs.size()]);
+            return strs.toArray(new String[strs.size()]);
         } catch (Exception e) {
             return def;
         }
@@ -69,7 +69,6 @@ public class PropertiesParser {
 
     public boolean getBooleanProperty(String name, boolean def) {
         String val = getStringProperty(name);
-
         return (val == null) ? def : Boolean.valueOf(val).booleanValue();
     }
 
@@ -78,7 +77,6 @@ public class PropertiesParser {
         if (val == null) {
             throw new NumberFormatException(" null string");
         }
-
         try {
             return Byte.parseByte(val);
         } catch (NumberFormatException nfe) {
@@ -92,7 +90,6 @@ public class PropertiesParser {
         if (val == null) {
             return def;
         }
-
         try {
             return Byte.parseByte(val);
         } catch (NumberFormatException nfe) {
@@ -300,6 +297,7 @@ public class PropertiesParser {
         return getPropertyGroup(prefix, false, null);
     }
 
+    //其实思想很简单 如果设置了excludedPrefixes 只要把每隔值放进去过滤一遍 然后用boolean来判断是否要put即可
     public Properties getPropertyGroup(String prefix, boolean stripPrefix) {
         return getPropertyGroup(prefix, stripPrefix, null);
     }
@@ -321,25 +319,20 @@ public class PropertiesParser {
     public Properties getPropertyGroup(String prefix, boolean stripPrefix, String[] excludedPrefixes) {
         Enumeration<?> keys = props.propertyNames();
         Properties group = new Properties();
-
         if (!prefix.endsWith(".")) {
             prefix += ".";
         }
-
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
             if (key.startsWith(prefix)) {
-
                 boolean exclude = false;
                 if (excludedPrefixes != null) {
                     for (int i = 0; (i < excludedPrefixes.length) && (exclude == false); i++) {
                         exclude = key.startsWith(excludedPrefixes[i]);
                     }
                 }
-
                 if (exclude == false) {
                     String value = getStringProperty(key, "");
-
                     if (stripPrefix) {
                         group.put(key.substring(prefix.length()), value);
                     } else {
@@ -348,7 +341,6 @@ public class PropertiesParser {
                 }
             }
         }
-
         return group;
     }
 }

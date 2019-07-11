@@ -169,6 +169,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void standby() throws SchedulerException {
         try {
             getRemoteScheduler().standby();
@@ -192,6 +193,7 @@ public class RemoteScheduler implements Scheduler {
      * @see #isShutdown()
      * @see #isInStandbyMode()
      */
+    @Override
     public boolean isStarted() throws SchedulerException {
         try {
             return (getRemoteScheduler().runningSince() != null);
@@ -206,6 +208,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean isInStandbyMode() throws SchedulerException {
         try {
             return getRemoteScheduler().isInStandbyMode();
@@ -220,6 +223,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void shutdown() throws SchedulerException {
         try {
             String schedulerName = getSchedulerName();
@@ -238,6 +242,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void shutdown(boolean waitForJobsToComplete)
             throws SchedulerException {
         try {
@@ -257,6 +262,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean isShutdown() throws SchedulerException {
         try {
             return getRemoteScheduler().isShutdown();
@@ -271,6 +277,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public List<JobExecutionContext> getCurrentlyExecutingJobs() throws SchedulerException {
         try {
             return getRemoteScheduler().getCurrentlyExecutingJobs();
@@ -291,6 +298,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public Date scheduleJob(JobDetail jobDetail, Trigger trigger)
             throws SchedulerException {
         try {
@@ -307,6 +315,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public Date scheduleJob(Trigger trigger) throws SchedulerException {
         try {
             return getRemoteScheduler().scheduleJob(trigger);
@@ -321,6 +330,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void addJob(JobDetail jobDetail, boolean replace)
             throws SchedulerException {
         try {
@@ -331,6 +341,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public void addJob(JobDetail jobDetail, boolean replace, boolean storeNonDurableWhileAwaitingScheduling)
             throws SchedulerException {
         try {
@@ -341,6 +352,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public boolean deleteJobs(List<JobKey> jobKeys) throws SchedulerException {
         try {
             return getRemoteScheduler().deleteJobs(jobKeys);
@@ -350,6 +362,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public void scheduleJobs(Map<JobDetail, Set<? extends Trigger>> triggersAndJobs, boolean replace) throws SchedulerException {
         try {
             getRemoteScheduler().scheduleJobs(triggersAndJobs, replace);
@@ -359,6 +372,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public void scheduleJob(JobDetail jobDetail, Set<? extends Trigger> triggersForJob, boolean replace) throws SchedulerException {
         try {
             getRemoteScheduler().scheduleJob(jobDetail, triggersForJob, replace);
@@ -368,6 +382,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public boolean unscheduleJobs(List<TriggerKey> triggerKeys)
             throws SchedulerException {
         try {
@@ -383,6 +398,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean deleteJob(JobKey jobKey)
             throws SchedulerException {
         try {
@@ -399,6 +415,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public boolean unscheduleJob(TriggerKey triggerKey)
             throws SchedulerException {
         try {
@@ -414,6 +431,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public Date rescheduleJob(TriggerKey triggerKey,
                               Trigger newTrigger) throws SchedulerException {
         try {
@@ -431,6 +449,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void triggerJob(JobKey jobKey)
             throws SchedulerException {
         triggerJob(jobKey, null);
@@ -441,6 +460,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void triggerJob(JobKey jobKey, JobDataMap data)
             throws SchedulerException {
         try {
@@ -456,6 +476,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void pauseTrigger(TriggerKey triggerKey)
             throws SchedulerException {
         try {
@@ -472,6 +493,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void pauseTriggers(GroupMatcher<TriggerKey> matcher) throws SchedulerException {
         try {
             getRemoteScheduler().pauseTriggers(matcher);
@@ -486,6 +508,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void pauseJob(JobKey jobKey)
             throws SchedulerException {
         try {
@@ -501,6 +524,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void pauseJobs(GroupMatcher<JobKey> matcher) throws SchedulerException {
         try {
             getRemoteScheduler().pauseJobs(matcher);
@@ -515,6 +539,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void resumeTrigger(TriggerKey triggerKey)
             throws SchedulerException {
         try {
@@ -530,6 +555,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void resumeTriggers(GroupMatcher<TriggerKey> matcher) throws SchedulerException {
         try {
             getRemoteScheduler().resumeTriggers(matcher);
@@ -544,6 +570,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void resumeJob(JobKey jobKey)
             throws SchedulerException {
         try {
@@ -559,6 +586,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void resumeJobs(GroupMatcher<JobKey> matcher) throws SchedulerException {
         try {
             getRemoteScheduler().resumeJobs(matcher);
@@ -573,6 +601,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void pauseAll() throws SchedulerException {
         try {
             getRemoteScheduler().pauseAll();
@@ -587,6 +616,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public void resumeAll() throws SchedulerException {
         try {
             getRemoteScheduler().resumeAll();
@@ -601,6 +631,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public List<String> getJobGroupNames() throws SchedulerException {
         try {
             return getRemoteScheduler().getJobGroupNames();
@@ -615,6 +646,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public Set<JobKey> getJobKeys(GroupMatcher<JobKey> matcher) throws SchedulerException {
         try {
             return getRemoteScheduler().getJobKeys(matcher);
@@ -629,6 +661,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public List<? extends Trigger> getTriggersOfJob(JobKey jobKey)
             throws SchedulerException {
         try {
@@ -644,6 +677,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public List<String> getTriggerGroupNames() throws SchedulerException {
         try {
             return getRemoteScheduler().getTriggerGroupNames();
@@ -658,6 +692,7 @@ public class RemoteScheduler implements Scheduler {
      * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
      * </p>
      */
+    @Override
     public Set<TriggerKey> getTriggerKeys(GroupMatcher<TriggerKey> matcher) throws SchedulerException {
         try {
             return getRemoteScheduler().getTriggerKeys(matcher);
@@ -850,6 +885,7 @@ public class RemoteScheduler implements Scheduler {
     ///////////////////////////////////////////////////////////////////////////
 
 
+    @Override
     public ListenerManager getListenerManager() throws SchedulerException {
         throw new SchedulerException(
                 "Operation not supported for remote schedulers.");
@@ -858,6 +894,7 @@ public class RemoteScheduler implements Scheduler {
     /**
      * @see org.quartz.Scheduler#interrupt(JobKey)
      */
+    @Override
     public boolean interrupt(JobKey jobKey) throws UnableToInterruptJobException {
         try {
             return getRemoteScheduler().interrupt(jobKey);
@@ -869,6 +906,7 @@ public class RemoteScheduler implements Scheduler {
         }
     }
 
+    @Override
     public boolean interrupt(String fireInstanceId) throws UnableToInterruptJobException {
         try {
             return getRemoteScheduler().interrupt(fireInstanceId);
@@ -883,6 +921,7 @@ public class RemoteScheduler implements Scheduler {
     /**
      * @see org.quartz.Scheduler#setJobFactory(org.quartz.spi.JobFactory)
      */
+    @Override
     public void setJobFactory(JobFactory factory) throws SchedulerException {
         throw new SchedulerException(
                 "Operation not supported for remote schedulers.");

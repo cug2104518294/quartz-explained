@@ -6,12 +6,10 @@ import java.util.Collection;
  * Provides a mechanism for obtaining client-usable handles to <code>Scheduler</code>
  * instances.
  *
- * @author James House
  * @see Scheduler
  * @see org.quartz.impl.StdSchedulerFactory
  */
 public interface SchedulerFactory {
-
 
     /**
      * <p>
